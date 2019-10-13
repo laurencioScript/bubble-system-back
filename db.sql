@@ -13,7 +13,7 @@ nivel int
 
 create table cliente_info(
 id_cliente_info int auto_increment primary key,
-cpf varchar(15),
+cpf varchar(20),
 cnpj varchar(20),
 nome varchar(100),
 razao_social varchar(100),
@@ -25,11 +25,11 @@ observacao_cor varchar(30)
 create table cliente_endereco(
 id_cliente_endereco int auto_increment primary key,
 endereco varchar(100),
-numero varchar(5),
-complemento varchar(100),
+numero varchar(10),
+complemento varchar(50),
 bairro varchar(50),
 estado varchar(50),
-cep varchar(11)
+cep varchar(20)
 );
 
 create table cliente_contato(
@@ -62,13 +62,13 @@ data_entrega datetime,
 data_pagamento datetime,
 data_retirada datetime,
 observacao varchar(100),
-situacao varchar(25)
+situacao varchar(40)
 );
 
 create table servico_cliente(
 id_servico_cliente int auto_increment primary key,
 nome varchar(100),
-cpf varchar(15),
+cpf varchar(20),
 cnpj Varchar(20),
 contato varchar(20)
 );
@@ -94,7 +94,7 @@ id_item int auto_increment primary key,
 servico_id int,
 peca_id int,
 quantidade int,
-unidade varchar(20),
+unidade varchar(50),
 valor_unitario double,
 valor_total double
 );
@@ -102,27 +102,27 @@ valor_total double
 create table cor_item(
 id_cor_item int auto_increment primary key,
 item_id int,
-cor_nome varchar(30),
-hexadecimal varchar(30)
+cor_nome varchar(50),
+hexadecimal varchar(20)
 );
 
 create table defeito_item(
 id_defeito_item int auto_increment primary key,
 item_id int,
-defeito varchar(30)
+defeito varchar(50)
 );
 
 create table peca(
 id_peca int auto_increment primary key,
 peca varchar(100),
-unidade varchar(20),
+unidade varchar(50),
 valor double
 );
 
 create table caracteristica_item(
 id_caracteristica_item int auto_increment primary key,
 item_id int,
-caracteristica varchar(30)
+caracteristica varchar(50)
 );
 
 alter table item add constraint FK_ITEM_SERVICO foreign key (servico_id) references servico(id_servico);
@@ -136,23 +136,23 @@ alter table caracteristica_item add constraint FK_CARACTERISTICA_ITEM foreign ke
 
 create table cor(
 id_cor int auto_increment,
-cor_nome varchar(100),
-hexadecimal varchar(50)
+cor_nome varchar(20),
+hexadecimal varchar(20)
 );
 
 create table defeito(
 id_defeito int auto_increment,
-defeito varchar(100)
+defeito varchar(50)
 );
 
 create table unidade(
 id_unidade int auto_increment,
-unidade varchar(100)
+unidade varchar(50)
 );
 
 create table caracteristica(
 id_caracteristica int auto_increment,
-caracteristica varchar(100)
+caracteristica varchar(50)
 );
 
 
