@@ -5,7 +5,7 @@ create table usuario(
 id_usuario int auto_increment primary key,
 nome varchar(100) ,
 senha varchar(100) ,
-email varchar(100) ,
+email varchar(100) unique ,
 nivel int 
 );
 
@@ -13,11 +13,11 @@ nivel int
 
 create table cliente_info(
 id_cliente_info int auto_increment primary key,
-cpf varchar(20),
-cnpj varchar(20),
+cpf varchar(20) unique,
+cnpj varchar(20) unique,
 nome varchar(100),
 razao_social varchar(100),
-email varchar(100),
+email varchar(100) unique,
 observacao_descricao varchar(300),
 observacao_cor varchar(30)
 );
@@ -39,7 +39,7 @@ cliente_id int
 );
 
 create table cliente(
-id_cliente int auto_increment,
+id_cliente int auto_increment primary key,
 cliente_info_id int,
 cliente_endereco_id int
 );
@@ -68,8 +68,8 @@ situacao varchar(40)
 create table servico_cliente(
 id_servico_cliente int auto_increment primary key,
 nome varchar(100),
-cpf varchar(20),
-cnpj Varchar(20),
+cpf varchar(20) unique,
+cnpj Varchar(20) unique,
 contato varchar(20)
 );
 
@@ -135,23 +135,23 @@ alter table caracteristica_item add constraint FK_CARACTERISTICA_ITEM foreign ke
 # PROPRIEDADES
 
 create table cor(
-id_cor int auto_increment,
+id_cor int auto_increment primary key,
 cor_nome varchar(20),
-hexadecimal varchar(20)
+hexadecimal varchar(20) unique
 );
 
 create table defeito(
-id_defeito int auto_increment,
+id_defeito int auto_increment primary key,
 defeito varchar(50)
 );
 
 create table unidade(
-id_unidade int auto_increment,
-unidade varchar(50)
+id_unidade int auto_increment primary key,
+unidade varchar(50) 
 );
 
 create table caracteristica(
-id_caracteristica int auto_increment,
+id_caracteristica int auto_increment primary key,
 caracteristica varchar(50)
 );
 
