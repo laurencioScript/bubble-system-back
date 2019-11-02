@@ -32,10 +32,10 @@ router.put('/:id', async (req, res) => {
 }); //Editar
 
 router.delete('/:id', async (req, res) => {
-    const result = await User.deleteUser(req.params.id);
+    await User.deleteUser(req.params.id);
     return  res.send({"result":"row deleted"});
 
 }); //Deletar
 
 
-module.exports = app => app.use('/produto',router);
+module.exports = app => app.use('/user',router);

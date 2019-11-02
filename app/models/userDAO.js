@@ -43,9 +43,7 @@ const getUser = async (userId) => {
 const updateUser = async (user) => {
 
   try{
-    console.log(user);
-    return await connect.query(`UPDATE usuario SET nome = '${user.name}', senha = '${user.password}' , email = '${user.email}' , nivel = '${user.level}'  
-    WHERE id_usuario = '${user.id}' `);
+    return await connect.query(`UPDATE usuario SET nome = '${user.name}', senha = '${user.password}' , email = '${user.email}' , nivel = '${user.level}'  WHERE id_usuario = '${user.id}' `);
   
   }
   catch(error){
