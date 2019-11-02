@@ -1,5 +1,3 @@
-create database lavanderia;
-use lavanderia;
 
 create table usuario(
 id_usuario int auto_increment primary key,
