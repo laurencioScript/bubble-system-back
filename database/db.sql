@@ -1,3 +1,32 @@
+ALTER TABLE IF EXISTS cliente DROP CONSTRAINT FK_CLIENTE_INFO;
+ALTER TABLE IF EXISTS cliente DROP CONSTRAINT FK_CLIENTE_ENDERECO;
+ALTER TABLE IF EXISTS servico DROP CONSTRAINT FK_SERVICO_PAGAMENTO;
+ALTER TABLE IF EXISTS servico DROP CONSTRAINT FK_SERVICO_CLIENTE;
+ALTER TABLE IF EXISTS item DROP CONSTRAINT FK_ITEM_SERVICO;
+ALTER TABLE IF EXISTS item DROP CONSTRAINT FK_ITEM_PECA;
+ALTER TABLE IF EXISTS cor_item DROP CONSTRAINT FK_COR_ITEM;
+ALTER TABLE IF EXISTS defeito_item DROP CONSTRAINT FK_DEFEITO_ITEM;
+ALTER TABLE IF EXISTS caracteristica_item DROP CONSTRAINT FK_CARACTERISTICA_ITEM;
+
+
+
+DROP TABLE IF EXISTS usuario;
+DROP TABLE IF EXISTS cliente_info;
+DROP TABLE IF EXISTS cliente;
+DROP TABLE IF EXISTS cliente_endereco;
+DROP TABLE IF EXISTS servico;
+DROP TABLE IF EXISTS servico_cliente;
+DROP TABLE IF EXISTS pagamento;
+DROP TABLE IF EXISTS item;
+DROP TABLE IF EXISTS cor_item;
+DROP TABLE IF EXISTS defeito_item;
+DROP TABLE IF EXISTS peca;
+DROP TABLE IF EXISTS caracteristica_item;
+DROP TABLE IF EXISTS cor;
+DROP TABLE IF EXISTS defeito;
+DROP TABLE IF EXISTS unidade;
+DROP TABLE IF EXISTS caracteristica;
+
 
 create table usuario(
 id_usuario serial primary key,
@@ -7,17 +36,18 @@ email varchar(100) unique ,
 nivel int 
 );
 
-# CLIENTE
+
 
 create table cliente_info(
 id_cliente_info serial primary key,
-cpf varchar(20) unique,
-cnpj varchar(20) unique,
+cpf_cnpj varchar(20) UNIQUE,
+tipo varchar(1),
 nome varchar(100),
 razao_social varchar(100),
 email varchar(100) unique,
 observacao_descricao varchar(300),
-observacao_cor varchar(30)
+observacao_cor varchar(30),
+contato text[]
 );
 
 create table cliente_endereco(
@@ -26,15 +56,12 @@ endereco varchar(100),
 numero varchar(10),
 complemento varchar(50),
 bairro varchar(50),
+cidade varchar(50),
 estado varchar(50),
 cep varchar(20)
 );
 
-create table cliente_contato(
-id_cliente_contato serial primary key,
-contato varchar(20),
-cliente_id int
-);
+
 
 create table cliente(
 id_cliente serial primary key,
@@ -46,10 +73,8 @@ alter table cliente add constraint FK_CLIENTE_INFO foreign key (cliente_info_id)
 
 alter table cliente add constraint FK_CLIENTE_ENDERECO foreign key (cliente_endereco_id) references cliente_endereco(id_cliente_endereco);
 
-alter table cliente_contato add constraint FK_CONTATO_CLIENTE foreign key (cliente_id) references cliente(id_cliente);
 
 
-# SERVICO
 
 create table servico(
 id_servico serial primary key,
@@ -85,7 +110,7 @@ valor_total decimal
 alter table servico add constraint FK_SERVICO_PAGAMENTO foreign key (pagamento_id) references pagamento(id_pagamento);
 alter table servico add constraint FK_SERVICO_CLIENTE foreign key (servico_cliente_id) references servico_cliente(id_servico_cliente);
 
-# ITEM
+
 
 create table item(
 id_item  serial primary key,
@@ -130,7 +155,7 @@ alter table cor_item add constraint FK_COR_ITEM foreign key (item_id) references
 alter table defeito_item add constraint FK_DEFEITO_ITEM foreign key (item_id) references item(id_item);
 alter table caracteristica_item add constraint FK_CARACTERISTICA_ITEM foreign key (item_id) references item(id_item);
 
-# PROPRIEDADES
+
 
 create table cor(
 id_cor serial primary key,

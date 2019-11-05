@@ -6,5 +6,6 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 
 require('./app/controllers/User')(app);
+require('./app/controllers/Client')(app);
 
-app.listen(3000);
+app.listen(3000, () => 'listening on', process.env.username);

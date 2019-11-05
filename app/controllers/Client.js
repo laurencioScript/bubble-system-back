@@ -1,26 +1,24 @@
 const express = require('express');
-const User = require('../models/userDAO');
+const Client = require('../models/clienteDAO');
 const router = express.Router();
-const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {
 
-    const result = await User.getUsers();
-    if(result.rows){
-        return res.send({"result":result.rows})
+    const result = await Client.getClients();
+    if(!result.detail){
+        return res.send({"result":result})
     }
     else{
-        return res.send({"result":result.detail}).status(400);
+        return res.send({"result":result}).status(400);
     }
     
 
-}); // List All Users
+}); 
 
 
 router.post('/register', async (req, res) => {
-    
-    req.body.password = await bcrypt.hash(req.body.password, 10);
-    const result = await User.createUsers(req.body);
+    console.log(req.body);
+    const result = await Client.createClient(req.body);
     
     if(result.success){
         return  res.send({"result":"successfully registered"});
@@ -30,24 +28,24 @@ router.post('/register', async (req, res) => {
     }
     
 
-});// Create User
+});
 
 router.get('/:id', async (req, res) => {
 
-    const result = await User.getUser(req.params.id);
-    if(result.rows){
-        return  res.send({"result":result.rows});
+    const result = await Client.getClient(req.params.id);
+    if(!result.detail){
+        return  res.send({"result":result});
     }
     else{
         return res.send({"result":result}).status(400);
     }
     
 
-}); //List One User
+}); 
 
 router.put('/:id', async (req, res) => {
     
-    const result = await User.updateUser({"id":req.params.id,...req.body});
+    const result = await Client.updateClient({"id":req.params.id,...req.body});
     if(result.success){
         return  res.send({"result":{"id":req.params.id,...req.body}});
     }
@@ -57,11 +55,11 @@ router.put('/:id', async (req, res) => {
     
 
 
-}); //Editar
+}); 
 
 router.delete('/:id', async (req, res) => {
     
-    const result = await User.deleteUser(req.params.id);
+    const result = await Client.deleteClient(req.params.id);
     if(result.success){
         return  res.send({"result":"row deleted"});
     }
@@ -69,8 +67,8 @@ router.delete('/:id', async (req, res) => {
         return res.send({"result":result}).status(400);
     }
 
-}); //Deletar
+}); 
 
 
-module.exports = app => app.use('/user',router);
+module.exports = app => app.use('/client',router);
 
