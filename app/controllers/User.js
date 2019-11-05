@@ -46,6 +46,8 @@ router.get('/:id', async (req, res) => {
 }); //List One User
 
 router.put('/:id', async (req, res) => {
+    if(req.body.password != '')
+        req.body.password = await bcrypt.hash(req.body.password, 10);
     
     const result = await User.updateUser({"id":req.params.id,...req.body});
     if(result.success){

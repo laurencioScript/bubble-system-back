@@ -49,7 +49,9 @@ const getUser = async (userId) => {
 const updateUser = async (user) => {
 
   try{
-    await connect.query(`UPDATE usuario SET nome = '${user.name}', senha = '${user.password}' , email = '${user.email}' , nivel = '${user.level}'  WHERE id_usuario = '${user.id}' `);
+    let query = `UPDATE usuario SET nome = '${user.name}', email = '${user.email}', nivel = '${user.level}'   `;
+    query += (user.password != '')?`, senha = '${user.password}' WHERE id_usuario = '${user.id}'` :`WHERE id_usuario = '${user.id}'`;  
+    await connect.query(query);
     return {"success":true};
   }
   catch(error){
