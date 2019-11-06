@@ -22,7 +22,7 @@ const getUsers = async () => {
   
   try{
 
-    const users =  await connect.query('select * from usuario');
+    const users =  await connect.query('select id_usuario,nome,email,nivel from usuario');
     return {"result":[users.rows]};
   }
   catch(error){
@@ -36,7 +36,7 @@ const getUser = async (userId) => {
   
   try{
     
-    const user = await connect.query(`select * from usuario where id_usuario = '${userId}'`);
+    const user = await connect.query(`select id_usuario,nome,email,nivel from usuario where id_usuario = '${userId}'`);
     return {"result":[user.rows]};
   }
   catch(error){
@@ -89,4 +89,18 @@ const deleteUser = async (userId) => {
   
 }
 
-module.exports = {createUsers,getUser,getUsers,updateUser,deleteUser};
+const loginUser = async (user)=>{
+  try{
+    console.log(user);
+    const result = await connect.query(`SELECT id_usuario,nome,email,nivel,senha FROM usuario WHERE email = '${user.email}'  `);  
+    
+    return result;    
+
+  }
+  catch(error){
+    console.log("Login DATABASE errror: ",error);
+    return {"error":error}
+  }
+}
+
+module.exports = {createUsers,getUser,getUsers,updateUser,deleteUser,loginUser};

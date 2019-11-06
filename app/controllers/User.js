@@ -3,15 +3,6 @@ const User = require('../models/userDAO');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 
-router.get('/', async (req, res) => {
-
-    const result = await User.getUsers();
-
-    return (!result.error)?res.status(200).send(result):res.status(400).send({"result":result});
-    
-}); // List All Users
-
-
 router.post('/register', async (req, res) => {
     
     req.body.password = await bcrypt.hash(req.body.password, 10);
@@ -22,6 +13,16 @@ router.post('/register', async (req, res) => {
 
 });// Create User
 
+router.get('/', async (req, res) => {
+
+    const result = await User.getUsers();
+
+    return (!result.error)?res.status(200).send(result):res.status(400).send({"result":result});
+    
+}); // List All Users
+
+
+
 router.get('/:id', async (req, res) => {
 
     const result = await User.getUser(req.params.id);
@@ -29,6 +30,12 @@ router.get('/:id', async (req, res) => {
     return (!result.error) ? res.status(200).send(result) : res.status(400).send({"result":result});
 
 }); //List One User
+
+router.get('/test', async(req,res)=>{
+   
+    console.log(req.params.email,req.params.senha)
+ 
+});
 
 router.put('/:id', async (req, res) => {
     
