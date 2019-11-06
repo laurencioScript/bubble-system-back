@@ -1,11 +1,11 @@
 const express = require('express');
-const User = require('../models/userDAO');
+const Unity = require('../models/unityDAO');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {
 
-    const result = await User.getUsers();
+    const result = await Unity.getUnitys();
 
     return (!result.error)?res.status(200).send(result):res.status(400).send({"result":result});
     
@@ -14,9 +14,7 @@ router.get('/', async (req, res) => {
 
 router.post('/register', async (req, res) => {
     
-    req.body.password = await bcrypt.hash(req.body.password, 10);
-    
-    const result = await User.createUsers(req.body);
+    const result = await Unity.createUnity(req.body);
     
     return (!result.error)? res.status(200).send({"result":"successfully registered"}):  res.status(400).send({"result":result});
 
@@ -24,7 +22,7 @@ router.post('/register', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
 
-    const result = await User.getUser(req.params.id);
+    const result = await Unity.getUnity(req.params.id);
    
     return (!result.error) ? res.status(200).send(result) : res.status(400).send({"result":result});
 
@@ -32,9 +30,7 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     
-    req.body.password = (req.body.password != '') ? await bcrypt.hash(req.body.password, 10):req.body.password;
-    
-    const result = await User.updateUser({"id":req.params.id,...req.body});
+    const result = await Unity.updateUnity({"id":req.params.id,...req.body});
 
     return (!result.error) ? res.status(200).send({"result":"row update"}) : res.status(400).send({"result":result});
 
@@ -42,12 +38,12 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     
-    const result = await User.deleteUser(req.params.id);
+    const result = await Unity.deleteUnity(req.params.id);
       
     return (!result.error)?res.status(200).send({"result":"row deleted"}) : res.status(400).send({"result":result});
     
 }); //Deletar
 
 
-module.exports = app => app.use('/user',router);
+module.exports = app => app.use('/unity',router);
 

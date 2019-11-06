@@ -7,5 +7,6 @@ app.use(express.urlencoded({ extended: false }));
 
 require('./app/controllers/User')(app);
 require('./app/controllers/Client')(app);
+require('./app/controllers/Unity')(app);
 
 app.listen(3000, () => 'listening on', process.env.username);

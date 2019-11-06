@@ -7,11 +7,11 @@ const createUsers =  async (user) => {
     await connect.query(`insert into usuario (nome,senha,email,nivel) values 
          ('${user.name}','${user.password}','${user.email}','${user.level}') `);
 
-    return {"success":true};
+    return {"result":true};
   }
   catch(error){
     console.log("Database Error: ", error);
-    return error
+    return {"error":error};
   }
   
 
@@ -21,12 +21,13 @@ const createUsers =  async (user) => {
 const getUsers = async () => {
   
   try{
-    return await connect.query('select * from usuario');
-    
+
+    const users =  await connect.query('select * from usuario');
+    return {"result":[users.rows]};
   }
   catch(error){
     console.log("Database Error: ", error)
-    return error;
+    return {"error":error};
   }
   
 }
@@ -35,12 +36,12 @@ const getUser = async (userId) => {
   
   try{
     
-    return await connect.query(`select * from usuario where id_usuario = '${userId}'`);
-  
+    const user = await connect.query(`select * from usuario where id_usuario = '${userId}'`);
+    return {"result":[user.rows]};
   }
   catch(error){
     console.log("Database Error: ", error)
-    return error;
+    return {"error":error};
   }
 
 }
@@ -49,14 +50,19 @@ const getUser = async (userId) => {
 const updateUser = async (user) => {
 
   try{
+    
     let query = `UPDATE usuario SET nome = '${user.name}', email = '${user.email}', nivel = '${user.level}'   `;
+    
     query += (user.password != '')?`, senha = '${user.password}' WHERE id_usuario = '${user.id}'` :`WHERE id_usuario = '${user.id}'`;  
-    await connect.query(query);
-    return {"success":true};
+    
+    const result = await connect.query(query);
+    
+    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
+  
   }
   catch(error){
     console.log("Database Error: ", error)
-    return error;
+    return {"error":error};
   }
 
   
@@ -66,12 +72,18 @@ const updateUser = async (user) => {
 const deleteUser = async (userId) => {
 
   try{
-    await connect.query(`DELETE FROM usuario WHERE id_usuario = '${userId}' `);
-    return {"success":true};
+
+    const result = await connect.query(`DELETE FROM usuario WHERE id_usuario = '${userId}' `);
+    
+    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
+    
+
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return error;
+ 
+    console.log("Delete DATABASE Error: ", error)
+    return {"error":error};
+ 
   }
 
   
