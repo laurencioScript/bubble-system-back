@@ -1,49 +1,48 @@
 const express = require('express');
-const Unity = require('../models/unityDAL');
+const Defect = require('../models/DefectDAL');
 const router = express.Router();
-const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {
 
-    const result = await Unity.getUnitys();
+    const result = await Defect.getDefects();
 
     return (!result.error)?res.status(200).send(result):res.status(400).send({"result":result});
     
-}); // List All Users
+}); // List All Defects
 
 
 router.post('/register', async (req, res) => {
     
-    const result = await Unity.createUnity(req.body);
+    const result = await Defect.createDefect(req.body);
     
     return (!result.error)? res.status(200).send({"result":"successfully registered"}):  res.status(400).send({"result":result});
 
-});// Create User
+});// Create Defect
 
 router.get('/:id', async (req, res) => {
 
-    const result = await Unity.getUnity(req.params.id);
+    const result = await Defect.getDefect(req.params.id);
    
     return (!result.error) ? res.status(200).send(result) : res.status(400).send({"result":result});
 
-}); //List One User
+}); //List One Defect
 
 router.put('/:id', async (req, res) => {
     
-    const result = await Unity.updateUnity({"id":req.params.id,...req.body});
+    const result = await Defect.updateDefect({"id":req.params.id,...req.body});
 
     return (!result.error) ? res.status(200).send({"result":"row update"}) : res.status(400).send({"result":result});
 
-}); //Editar
+}); //Editar Defect
 
 router.delete('/:id', async (req, res) => {
     
-    const result = await Unity.deleteUnity(req.params.id);
+    const result = await Defect.deleteDefect(req.params.id);
       
     return (!result.error)?res.status(200).send({"result":"row deleted"}) : res.status(400).send({"result":result});
     
-}); //Deletar
+}); //Deletar Piece
 
 
-module.exports = app => app.use('/unity',router);
+module.exports = app => app.use('/defect',router);
 

@@ -1,49 +1,48 @@
 const express = require('express');
-const Unity = require('../models/unityDAL');
+const Characteristic = require('../models/CharacteristicDAL');
 const router = express.Router();
-const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {
 
-    const result = await Unity.getUnitys();
+    const result = await Characteristic.getCharacteristics();
 
     return (!result.error)?res.status(200).send(result):res.status(400).send({"result":result});
     
-}); // List All Users
+}); // List All Characteristics
 
 
 router.post('/register', async (req, res) => {
     
-    const result = await Unity.createUnity(req.body);
+    const result = await Characteristic.createCharacteristic(req.body);
     
     return (!result.error)? res.status(200).send({"result":"successfully registered"}):  res.status(400).send({"result":result});
 
-});// Create User
+});// Create Characteristic
 
 router.get('/:id', async (req, res) => {
 
-    const result = await Unity.getUnity(req.params.id);
+    const result = await Characteristic.getCharacteristic(req.params.id);
    
     return (!result.error) ? res.status(200).send(result) : res.status(400).send({"result":result});
 
-}); //List One User
+}); //List One Characteristic
 
 router.put('/:id', async (req, res) => {
     
-    const result = await Unity.updateUnity({"id":req.params.id,...req.body});
+    const result = await Characteristic.updateCharacteristic({"id":req.params.id,...req.body});
 
     return (!result.error) ? res.status(200).send({"result":"row update"}) : res.status(400).send({"result":result});
 
-}); //Editar
+}); //Editar Characteristic
 
 router.delete('/:id', async (req, res) => {
     
-    const result = await Unity.deleteUnity(req.params.id);
+    const result = await Characteristic.deleteCharacteristic(req.params.id);
       
     return (!result.error)?res.status(200).send({"result":"row deleted"}) : res.status(400).send({"result":result});
     
-}); //Deletar
+}); //Deletar Characteristic
 
 
-module.exports = app => app.use('/unity',router);
+module.exports = app => app.use('/characteristic',router);
 

@@ -1,5 +1,5 @@
 const express = require('express');
-const Client = require('../models/clienteDAO');
+const Client = require('../models/clienteDAL');
 const router = express.Router();
 
 router.get('/', async (req, res) => {

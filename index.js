@@ -12,6 +12,9 @@ require('./app/controllers/Client')(app);
 require('./app/controllers/Unity')(app);
 require('./app/controllers/Login')(app);
 require('./app/controllers/Piece')(app);
+require('./app/controllers/Color')(app);
+require('./app/controllers/Characteristic')(app);
+require('./app/controllers/Defect')(app);
 
 
 app.listen(3000, () => 'listening on', process.env.username);
