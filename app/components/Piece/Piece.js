@@ -1,5 +1,5 @@
 const express = require('express');
-const Piece = require('../models/PieceDAL');
+const Piece = require('./PieceDAL');
 const router = express.Router();
 
 router.get('/', async (req, res) => {

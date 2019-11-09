@@ -7,14 +7,16 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 
-require('./app/controllers/User')(app);
-require('./app/controllers/Client')(app);
-require('./app/controllers/Unity')(app);
-require('./app/controllers/Login')(app);
-require('./app/controllers/Piece')(app);
-require('./app/controllers/Color')(app);
-require('./app/controllers/Characteristic')(app);
-require('./app/controllers/Defect')(app);
+require('./app/components/User/User')(app);
+require('./app/components/Client/Client')(app);
+require('./app/components/Unity/Unity')(app);
+require('./app/components/User/Login')(app);
+require('./app/components/Piece/Piece')(app);
+require('./app/components/Color/Color')(app);
+require('./app/components/Characteristic/Characteristic')(app);
+require('./app/components/Defect/Defect')(app);
+require('./app/components/Service/Service')(app);
+require('./app/components/Item/Item')(app);
 
 
-app.listen(3000, () => 'listening on', process.env.username);
+app.listen(3000, () => console.log('Serve ON, PORT:3000'));

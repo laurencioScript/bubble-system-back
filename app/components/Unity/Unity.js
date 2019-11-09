@@ -1,48 +1,48 @@
 const express = require('express');
-const Color = require('../models/colorDAL');
+const Unity = require('./unityDAL');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
 
-    const result = await Color.getColors();
+    const result = await Unity.getUnitys();
 
     return (!result.error)?res.status(200).send(result):res.status(400).send({"result":result});
     
-}); // List All Pieces
+}); // List All Users
 
 
 router.post('/register', async (req, res) => {
     
-    const result = await Color.createColor(req.body);
+    const result = await Unity.createUnity(req.body);
     
     return (!result.error)? res.status(200).send({"result":"successfully registered"}):  res.status(400).send({"result":result});
 
-});// Create Piece
+});// Create User
 
 router.get('/:id', async (req, res) => {
 
-    const result = await Color.getColor(req.params.id);
+    const result = await Unity.getUnity(req.params.id);
    
     return (!result.error) ? res.status(200).send(result) : res.status(400).send({"result":result});
 
-}); //List One Piece
+}); //List One User
 
 router.put('/:id', async (req, res) => {
     
-    const result = await Color.updateColor({"id":req.params.id,...req.body});
+    const result = await Unity.updateUnity({"id":req.params.id,...req.body});
 
     return (!result.error) ? res.status(200).send({"result":"row update"}) : res.status(400).send({"result":result});
 
-}); //Editar Piece
+}); //Editar
 
 router.delete('/:id', async (req, res) => {
     
-    const result = await Color.deleteColor(req.params.id);
+    const result = await Unity.deleteUnity(req.params.id);
       
     return (!result.error)?res.status(200).send({"result":"row deleted"}) : res.status(400).send({"result":result});
     
-}); //Deletar Piece
+}); //Deletar
 
 
-module.exports = app => app.use('/color',router);
+module.exports = app => app.use('/unity',router);
 
