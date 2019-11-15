@@ -1,11 +1,11 @@
 const {connect} = require('./../../../database');
-
+const uuidV4 = require('uuid/v4');
 
 const createUsers =  async (user) => {
   try{
     
-    await connect.query(`insert into usuario (nome,senha,email,nivel) values 
-         ('${user.name}','${user.password}','${user.email}','${user.level}') `);
+    await connect.query(`insert into usuario values 
+         ('${uuidV4()}','${user.name}','${user.password}','${user.email}','${user.level}') `);
 
     return {"result":true};
   }

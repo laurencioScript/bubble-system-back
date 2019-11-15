@@ -1,5 +1,6 @@
 const {connect} = require('./../../../database');
 const Item = require('./../Item/itemDAL');
+const uuidV4 = require('uuid/v4');
 
 const createService =  async (service) => {
     const {pagamento,items} = service;
@@ -10,17 +11,15 @@ const createService =  async (service) => {
 
         // SAFE ZONE
 
-        await client.query(`insert into pagamento (cartao_debito,cartao_credito,cheque,
-        dinheiro,desconto,valor_pago,valor_total) 
-        values ('${pagamento.cartao_debito}','${pagamento.cartao_credito}',
+        await client.query(`insert into pagamento 
+        values ('${uuidV4()}','${pagamento.cartao_debito}','${pagamento.cartao_credito}',
         '${pagamento.cheque}','${pagamento.dinheiro}','${pagamento.desconto}',
         '${pagamento.valor_pago}','${pagamento.valor_total}')`)
 
         const pagamentoId = await client.query('select MAX(id_pagamento) from pagamento');
 
-        await client.query(`insert into servico (pagamento_id,data_entrada,data_entrega,data_pagamento,
-        data_retirada,observacao,situacao,cliente) 
-        values ('${pagamentoId.rows[0].max}','${service.data_entrada}','${service.data_entrega}',
+        await client.query(`insert into servico
+        values ('${uuidV4()}','${pagamentoId.rows[0].max}','${service.data_entrada}','${service.data_entrega}',
         '${service.data_pagamento}','${service.data_retirada}',
         '${service.observacao}','${service.situacao}', '${JSON.stringify(service.cliente)}') `);
 

@@ -3,7 +3,7 @@ const User = require('./userDAL');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 
-router.get('/', async(req,res)=>{
+router.post('/', async(req,res)=>{
  
     let result = await User.loginUser(req.body);
    

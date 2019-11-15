@@ -1,5 +1,5 @@
 const {connect} = require('./../../../database');
-
+const uuidV4 = require('uuid/v4');
 
 const createItem  = async(item) => {
     console.log(item)
@@ -7,9 +7,8 @@ const createItem  = async(item) => {
     try {
         await client.query('BEGIN');
 
-        await client.query(`insert into item (servico_id,quantidade,unidade,
-            valor_unitario,valor_total,peca,cores,defeitos,caracteristicas) 
-            values ('${item.servico_id}','${item.quantidade}','${item.unidade}',
+        await client.query(`insert into item  
+            values ('${uuidV4()}','${item.servico_id}','${item.quantidade}','${item.unidade}',
             '${item.valor_unitario}','${item.valor_total}',
             '${item.peca}', '${JSON.stringify(item.cores)}', 
             '${JSON.stringify(item.defeitos)}',

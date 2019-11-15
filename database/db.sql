@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS caracteristica;
 
 
 create table usuario(
-id_usuario serial primary key,
+id_usuario uuid primary key,
 nome varchar(100) ,
 senha varchar(100) ,
 email varchar(100) unique ,
@@ -40,7 +40,7 @@ nivel int
 
 
 create table cliente_info(
-id_cliente_info serial primary key,
+id_cliente_info uuid primary key,
 cpf_cnpj varchar(20) UNIQUE,
 tipo varchar(1),
 nome varchar(100),
@@ -52,7 +52,7 @@ contato text[]
 );
 
 create table cliente_endereco(
-id_cliente_endereco serial primary key,
+id_cliente_endereco uuid primary key,
 endereco varchar(100),
 numero varchar(10),
 complemento varchar(50),
@@ -65,9 +65,9 @@ cep varchar(20)
 
 
 create table cliente(
-id_cliente serial primary key,
-cliente_info_id int,
-cliente_endereco_id int
+id_cliente uuid primary key,
+cliente_info_id uuid,
+cliente_endereco_id uuid
 );
 
 alter table cliente add constraint FK_CLIENTE_INFO foreign key (cliente_info_id) references cliente_info(id_cliente_info);
@@ -78,8 +78,8 @@ alter table cliente add constraint FK_CLIENTE_ENDERECO foreign key (cliente_ende
 
 
 create table servico(
-id_servico serial primary key,
-pagamento_id int,
+id_servico uuid primary key,
+pagamento_id uuid,
 data_entrada timestamp,
 data_entrega timestamp,
 data_pagamento timestamp,
@@ -90,7 +90,7 @@ cliente json
 );
 
 create table pagamento(
-id_pagamento serial primary key,
+id_pagamento uuid primary key,
 cartao_debito decimal,
 cartao_credito decimal,
 cheque decimal,
@@ -105,8 +105,8 @@ alter table servico add constraint FK_SERVICO_PAGAMENTO foreign key (pagamento_i
 
 
 create table item(
-id_item  serial primary key,
-servico_id int,
+id_item  uuid primary key,
+servico_id uuid,
 peca varchar(30),
 quantidade int,
 unidade varchar(50),
@@ -120,7 +120,7 @@ caracteristicas JSON
 
 
 create table peca(
-id_peca  serial primary key,
+id_peca  uuid primary key,
 peca varchar(100),
 unidade varchar(50),
 valor decimal
@@ -133,23 +133,23 @@ alter table item add constraint FK_ITEM_SERVICO foreign key (servico_id) referen
 
 
 create table cor(
-id_cor serial primary key,
+id_cor uuid primary key,
 cor_nome varchar(20),
 hexadecimal varchar(20) unique
 );
 
 create table defeito(
-id_defeito serial primary key,
+id_defeito uuid primary key,
 defeito varchar(50)
 );
 
 create table unidade(
-id_unidade serial primary key,
+id_unidade uuid primary key,
 unidade varchar(50) 
 );
 
 create table caracteristica(
-id_caracteristica serial primary key,
+id_caracteristica uuid primary key,
 caracteristica varchar(50)
 );
 

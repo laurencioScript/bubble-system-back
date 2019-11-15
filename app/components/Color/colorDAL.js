@@ -1,11 +1,11 @@
 const {connect} = require('./../../../database');
-
+const uuidV4 = require('uuid/v4');
 
 const createColor =  async (color) => {
   try{
     
-    await connect.query(`insert into cor (cor_nome,hexadecimal) values 
-         ('${color.color}','${color.hexadecimal}') `);
+    await connect.query(`insert into cor values 
+         ('${uuidV4()}','${color.color}','${color.hexadecimal}') `);
 
     return {"result":true};
   }

@@ -1,11 +1,11 @@
 const {connect} = require('./../../../database');
-
+const uuidV4 = require('uuid/v4');
 
 const createDefect =  async (defect) => {
   try{
     
-    await connect.query(`insert into defeito (defeito) values 
-         ('${defect.defect}') `);
+    await connect.query(`insert into defeito  values 
+         ('${uuidV4()}','${defect.defect}') `);
 
     return {"result":true};
   }

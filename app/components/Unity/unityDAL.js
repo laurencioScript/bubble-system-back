@@ -1,11 +1,11 @@
 const {connect} = require('./../../../database');
-
+const uuidV4 = require('uuid/v4');
 
 const createUnity =  async (unity) => {
   try{
     
-    await connect.query(`insert into unidade (unidade) values 
-         ('${unity.unidade}') `);
+    await connect.query(`insert into unidade values 
+         ('${uuidV4()}','${unity.unidade}') `);
 
     return {"result":true};
   }

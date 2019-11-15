@@ -1,11 +1,11 @@
 const {connect} = require('./../../../database');
-
+const uuidV4 = require('uuid/v4');
 
 const createCharacteristic =  async (charac) => {
   try{
     
-    await connect.query(`insert into caracteristica (caracteristica) values 
-         ('${charac.caracteristica}') `);
+    await connect.query(`insert into caracteristica values 
+         ('${uuidV4()}','${charac.caracteristica}') `);
 
     return {"result":true};
   }

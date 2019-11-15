@@ -1,11 +1,11 @@
 const {connect} = require('./../../../database');
-
+const uuidV4 = require('uuid/v4');
 
 const createPiece =  async (piece) => {
   try{
     
-    await connect.query(`insert into peca (peca,unidade,valor) values 
-         ('${piece.peca}','${piece.unidade}','${piece.valor}') `);
+    await connect.query(`insert into peca values 
+         ('${uuidV4()}','${piece.peca}','${piece.unidade}','${piece.valor}') `);
 
     return {"result":true};
   }
