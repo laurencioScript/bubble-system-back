@@ -3,7 +3,7 @@ const uuidV4 = require('uuid/v4');
 
 const createItem  = async(item) => {
     console.log(item)
-    const client = connect;
+    const client = connect();
     try {
         await client.query('BEGIN');
 
@@ -23,16 +23,16 @@ const createItem  = async(item) => {
         console.log("Database Error: ", error);
         return {"error":error};
     }
-  
+    client.end();
 
 }
 
 
 const getAllItems = async () => {
-  
+  const client = connect();
   try{
 
-    const result =  await connect.query('select * from item');
+    const result =  await client.query('select * from item');
     
     return {"result":result.rows};
   }
@@ -40,14 +40,14 @@ const getAllItems = async () => {
     console.log("Database Error: ", error)
     return {"error":error};
   }
-  
+  client.end();
 }
 
 const getOneItem = async (itemId) => {
-  
+  const client = connect();
   try{
     
-    const result =  await connect.query(`select * from item where id_item = '${itemId}' `);
+    const result =  await client.query(`select * from item where id_item = '${itemId}' `);
 
     return {"result":result.rows};
   }
@@ -55,15 +55,15 @@ const getOneItem = async (itemId) => {
     console.log("Database Error: ", error)
     return {"error":error};
   }
-
+client.end();
 }
 
 
 const updateItems = async (item) => {
-
+  const client = connect();
   try{
     console.log(item)
-    const result = await connect.query(`update item SET
+    const result = await client.query(`update item SET
     quantidade ='${item.quantidade}',
     unidade ='${item.unidade}', valor_unitario ='${item.valor_unitario}',
     valor_total='${item.valor_total}', peca = '${item.peca}', 
@@ -79,16 +79,16 @@ const updateItems = async (item) => {
     console.log("Database Error: ", error)
     return {"error":error};
   }
-
+client.end();
   
 }
 
 
 const deleteItem = async (itemId) => {
-
+  const client = connect();
   try{
 
-    const result = await connect.query(`DELETE FROM item WHERE id_item = '${itemId}' `);
+    const result = await client.query(`DELETE FROM item WHERE id_item = '${itemId}' `);
     
     return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
     
@@ -100,7 +100,7 @@ const deleteItem = async (itemId) => {
     return {"error":error};
  
   }
-
+client.end();
   
 }
 
