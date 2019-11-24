@@ -3,27 +3,26 @@ const uuidV4 = require('uuid/v4');
 
 const createUnity =  async (unity) => {
   try{
-    
-    await connect.query(`insert into unidade values 
+    const client = connect();
+    await client.query(`insert into unidade values 
          ('${uuidV4()}','${unity.unidade}') `);
-
+    client.end();
     return {"result":true};
   }
   catch(error){
     console.log("Database Error: ", error);
     return {"error":error};
   }
-  
-
 }
 
 
 const getUnitys = async () => {
   
   try{
-
-    const unity =  await connect.query('select * from unidade');
-    return {"result":[unity.rows]};
+    const client = connect();
+    const unity =  await client.query('select * from unidade');
+    client.end();
+    return {"result":unity.rows};
   }
   catch(error){
     console.log("Database Error: ", error)
@@ -35,9 +34,10 @@ const getUnitys = async () => {
 const getUnity = async (unityId) => {
   
   try{
-    
-    const unity = await connect.query(`select * from unidade where id_unidade = '${unityId}'`);
-    return {"result":[unity.rows]};
+    const client = connect();
+    const unity = await client.query(`select * from unidade where id_unidade = '${unityId}'`);
+    client.end();
+    return {"result":unity.rows};
   }
   catch(error){
     console.log("Database Error: ", error)
@@ -50,9 +50,9 @@ const getUnity = async (unityId) => {
 const updateUnity = async (unity) => {
 
   try{
-
-    const result = await connect.query(`UPDATE unidade SET unidade = '${unity.unidade}' where id_unidade = '${unity.id}' `);
-    
+    const client = connect();
+    const result = await client.query(`UPDATE unidade SET unidade = '${unity.unidade}' where id_unidade = '${unity.id}' `);
+    client.end();
     return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
   
   }
@@ -68,9 +68,9 @@ const updateUnity = async (unity) => {
 const deleteUnity = async (unityId) => {
 
   try{
-
-    const result = await connect.query(`DELETE FROM unidade WHERE id_unidade = '${unityId}' `);
-    
+    const client = connect();
+    const result = await client.query(`DELETE FROM unidade WHERE id_unidade = '${unityId}' `);
+    client.end();
     return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
     
 

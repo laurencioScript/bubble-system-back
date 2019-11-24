@@ -3,18 +3,18 @@ const uuidV4 = require('uuid/v4');
 
 const createUsers =  async (user) => {
   try{
-    
-    await connect.query(`insert into usuario values 
-         ('${uuidV4()}','${user.name}','${user.password}','${user.email}','${user.level}') `);
 
+    const client = connect();
+    
+    await client.query(`insert into usuario values 
+         ('${uuidV4()}','${user.name}','${user.password}','${user.email}','${user.level}') `);
+    client.end();
     return {"result":true};
   }
   catch(error){
     console.log("Database Error: ", error);
     return {"error":error};
   }
-  
-
 }
 
 
@@ -22,8 +22,11 @@ const getUsers = async () => {
   
   try{
 
-    const users =  await connect.query('select id_usuario,nome,email,nivel from usuario');
-    return {"result":[users.rows]};
+    const client = connect();
+
+    const users =  await client.query('select id_usuario,nome,email,nivel from usuario');
+    client.end();
+    return {"result":users.rows};
   }
   catch(error){
     console.log("Database Error: ", error)
@@ -35,9 +38,13 @@ const getUsers = async () => {
 const getUser = async (userId) => {
   
   try{
+    const client = connect();
+
+    const user = await client.query(`select id_usuario,nome,email,nivel from usuario where id_usuario = '${userId}'`);
     
-    const user = await connect.query(`select id_usuario,nome,email,nivel from usuario where id_usuario = '${userId}'`);
-    return {"result":[user.rows]};
+    client.end();
+    
+    return {"result":user.rows};
   }
   catch(error){
     console.log("Database Error: ", error)
@@ -50,13 +57,13 @@ const getUser = async (userId) => {
 const updateUser = async (user) => {
 
   try{
-    
+    const client = connect();
     let query = `UPDATE usuario SET nome = '${user.name}', email = '${user.email}', nivel = '${user.level}'   `;
     
     query += (user.password != '')?`, senha = '${user.password}' WHERE id_usuario = '${user.id}'` :`WHERE id_usuario = '${user.id}'`;  
     
-    const result = await connect.query(query);
-    
+    const result = await client.query(query);
+    client.end();
     return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
   
   }
@@ -72,9 +79,9 @@ const updateUser = async (user) => {
 const deleteUser = async (userId) => {
 
   try{
-
-    const result = await connect.query(`DELETE FROM usuario WHERE id_usuario = '${userId}' `);
-    
+    const client = connect();
+    const result = await client.query(`DELETE FROM usuario WHERE id_usuario = '${userId}' `);
+    client.end();
     return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
     
 
@@ -92,13 +99,14 @@ const deleteUser = async (userId) => {
 const loginUser = async (user)=>{
   try{
     console.log(user);
-    const result = await connect.query(`SELECT id_usuario,nome,email,nivel,senha FROM usuario WHERE email = '${user.email}'  `);  
-    
+    const client = connect();
+    const result = await client.query(`SELECT id_usuario,nome,email,nivel,senha FROM usuario WHERE email = '${user.email}'  `);  
+    client.end();
     return result;    
 
   }
   catch(error){
-    console.log("Login DATABASE errror: ",error);
+    console.log("Login DATABASE error: ",error);
     return {"error":error}
   }
 }

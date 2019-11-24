@@ -4,8 +4,7 @@ const uuidV4 = require('uuid/v4');
 
 const createService =  async (service) => {
     const {pagamento,items} = service;
-    const client = connect;
-    
+    const client = connect();
     try {
         await client.query('BEGIN');
 
@@ -51,16 +50,15 @@ const createService =  async (service) => {
         console.log("Database Error: ", error);
         return {"error":error};
     }
-  
+    client.end();
 
 }
 
 
 const getAllServices = async () => {
-  
+  const client = connect();
   try{
-
-    const result =  await connect.query('select * from servico join pagamento on id_pagamento = id_servico');
+    const result =  await client.query('select * from servico join pagamento on id_pagamento = id_servico');
     const services= result.rows;
 
     for(let service of services){
@@ -75,17 +73,17 @@ const getAllServices = async () => {
     console.log("Database Error: ", error)
     return {"error":error};
   }
+  client.end();
   
 }
 
 const getOneService = async (serviceId) => {
-  
+  const client = connect();
   try{
-    
-    const result =  await connect.query(`select * from servico join pagamento on id_pagamento = id_servico where id_servico = '${serviceId}' `);
+    const result =  await client.query(`select * from servico join pagamento on id_pagamento = id_servico where id_servico = '${serviceId}' `);
     const services= result.rows;
     for(let service of services){
-      const items = await connect.query(`select * from item where id_item = ${service.id_servico}`)
+      const items = await client.query(`select * from item where id_item = ${service.id_servico}`)
       service.items = items.rows;
     }
     return {"result":services};
@@ -94,19 +92,19 @@ const getOneService = async (serviceId) => {
     console.log("Database Error: ", error)
     return {"error":error};
   }
-
+  client.end();
 }
 
 
 const updateService = async (service) => {
 
   console.log(service)
-
+  const client = connect();
   try{
     
     const {pagamento} = service;
 
-    const resultPagamento = await connect.query(`UPDATE pagamento 
+    const resultPagamento = await client.query(`UPDATE pagamento 
     SET 
     cartao_debito = ${pagamento.cartao_debito},
     cartao_credito = ${pagamento.cartao_credito}, 
@@ -131,7 +129,7 @@ const updateService = async (service) => {
       cliente = '${JSON.stringify(service.cliente)}'
       where id_servico = '${service.id_servico}' `)
 
-    const resultServico = await connect.query(`UPDATE servico SET
+    const resultServico = await client.query(`UPDATE servico SET
     data_entrada = '${service.data_entrada}', 
     data_entrega = '${service.data_entrega}',
     data_pagamento = '${service.data_pagamento}',
@@ -140,8 +138,6 @@ const updateService = async (service) => {
     situacao = '${service.situacao}', 
     cliente = '${JSON.stringify(service.cliente)}'
     where id_servico = '${service.id_servico}' `);
-    
-
     return (resultServico.rowCount > 0) ? {"result":true}: {"error":"Not found service"};
   
   }
@@ -149,13 +145,13 @@ const updateService = async (service) => {
     console.log("Database Error: ", error)
     return {"error":error};
   }
-
+  client.end();
   
 }
 
 
 const deleteService = async (servicoId) => {
-
+  const client = connect();
   try{
 
     const infoService = await getOneService(servicoId);
@@ -169,12 +165,12 @@ const deleteService = async (servicoId) => {
     }
 
 
-    const resultService = await connect.query(`DELETE FROM servico WHERE id_servico = '${servicoId}' `);
+    const resultService = await client.query(`DELETE FROM servico WHERE id_servico = '${servicoId}' `);
  
     if(resultService.rowCount < 1 )
       return  {"error":"Not found 'service' "}; 
 
-    const resultPagamento = await connect.query(`DELETE FROM pagamento WHERE id_pagamento = '${id_pagamento}' `);
+    const resultPagamento = await client.query(`DELETE FROM pagamento WHERE id_pagamento = '${id_pagamento}' `);
 
     if(resultPagamento.rowCount < 1 )
     return  {"error":"Not found 'pagamento' "}; 
@@ -188,7 +184,7 @@ const deleteService = async (servicoId) => {
     return {"error":error};
  
   }
-
+  client.end();
   
 }
 

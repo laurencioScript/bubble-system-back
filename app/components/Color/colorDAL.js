@@ -2,9 +2,10 @@ const {connect} = require('./../../../database');
 const uuidV4 = require('uuid/v4');
 
 const createColor =  async (color) => {
+  const client = connect();
   try{
     
-    await connect.query(`insert into cor values 
+    await client.query(`insert into cor values 
          ('${uuidV4()}','${color.color}','${color.hexadecimal}') `);
 
     return {"result":true};
@@ -13,45 +14,45 @@ const createColor =  async (color) => {
     console.log("Database Error: ", error);
     return {"error":error};
   }
-  
+  client.end();
 
 }
 
 
 const getColors = async () => {
-  
+  const client = connect();
   try{
 
-    const result =  await connect.query('select * from cor');
-    return {"result":[result.rows]};
+    const result =  await client.query('select * from cor');
+    return {"result":result.rows};
   }
   catch(error){
     console.log("Database Error: ", error)
     return {"error":error};
   }
-  
+  client.end();
 }
 
 const getColor = async (colorId) => {
-  
+  const client = connect();
   try{
     
-    const result = await connect.query(`select * from cor where id_cor = '${colorId}'`);
-    return {"result":[result.rows]};
+    const result = await client.query(`select * from cor where id_cor = '${colorId}'`);
+    return {"result":result.rows};
   }
   catch(error){
     console.log("Database Error: ", error)
     return {"error":error};
   }
-
+client.end();
 }
 
 
 const updateColor = async (color) => {
-
+  const client = connect();
   try{
 
-    const result = await connect.query(`UPDATE cor 
+    const result = await client.query(`UPDATE cor 
     SET cor_nome = '${color.color}', 
     hexadecimal = '${color.hexadecimal}' 
     where id_cor = '${color.id}' `);
@@ -64,15 +65,15 @@ const updateColor = async (color) => {
     return {"error":error};
   }
 
-  
+  client.end();
 }
 
 
 const deleteColor = async (colorId) => {
-
+  const client = connect();
   try{
 
-    const result = await connect.query(`DELETE FROM cor WHERE id_cor = '${colorId}' `);
+    const result = await client.query(`DELETE FROM cor WHERE id_cor = '${colorId}' `);
     
     return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
     
@@ -84,7 +85,7 @@ const deleteColor = async (colorId) => {
     return {"error":error};
  
   }
-
+client.end();
   
 }
 
