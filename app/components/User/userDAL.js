@@ -6,6 +6,7 @@ const createUsers =  async (user) => {
   
   const client = connect();
   try{
+
     
     return await client.query(`insert into userx values 
          ('${uuidV4()}','${user.name}','${user.password}','${user.email}','${user.level}') `);

@@ -56,9 +56,5 @@ router.post('/', async(req,res)=>{
 }
 
 
-});
-
-
-
 module.exports = app => app.use('/login',router);
 
