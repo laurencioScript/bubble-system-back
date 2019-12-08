@@ -2,63 +2,74 @@ const {connect} = require('./../../../database');
 const uuidV4 = require('uuid/v4');
 
 const createUnity =  async (unity) => {
+  const client = connect();
   try{
-    const client = connect();
-    await client.query(`insert into unidade values 
-         ('${uuidV4()}','${unity.unidade}') `);
-    client.end();
-    return {"result":true};
+    
+   return await client.query(`insert into unity values 
+         ('${unity.id}','${unity.name}') `);
   }
   catch(error){
-    console.log("Database Error: ", error);
-    return {"error":error};
+    throw error;   
+  }
+  finally{
+    client.end();
   }
 }
 
 
-const getUnitys = async () => {
-  
+const getUnitys = async (values) => {
+  const client = connect();
   try{
-    const client = connect();
-    const unity =  await client.query('select * from unidade');
-    client.end();
-    return {"result":unity.rows};
+   
+    
+    let query = 'select * from unity ';
+    if(values.name){
+      query += 'where ';
+      query += values.name ? `unity_name like '%${values.name}%' ` :""
+    }
+
+    query += `order by unity_name desc limit '${values.limit}' offset '${values.offset}'`;
+
+    return await client.query(query);    
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
+  }
+  finally{
+    client.end();
   }
   
 }
 
 const getUnity = async (unityId) => {
-  
+  const client = connect();
   try{
-    const client = connect();
-    const unity = await client.query(`select * from unidade where id_unidade = '${unityId}'`);
-    client.end();
-    return {"result":unity.rows};
+    
+    return await client.query(`select * from unity where id_unity = '${unityId}'`);
+  
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
+  }
+  finally{
+    client.end();
   }
 
 }
 
 
 const updateUnity = async (unity) => {
-
+  const client = connect();
   try{
-    const client = connect();
-    const result = await client.query(`UPDATE unidade SET unidade = '${unity.unidade}' where id_unidade = '${unity.id}' `);
-    client.end();
-    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
+   
+    return await client.query(`UPDATE unity SET unity_name = '${unity.name}' where id_unity = '${unity.id}' `);
   
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
+  }
+  finally{
+    client.end();
   }
 
   
@@ -66,20 +77,18 @@ const updateUnity = async (unity) => {
 
 
 const deleteUnity = async (unityId) => {
-
+  const client = connect();
   try{
-    const client = connect();
-    const result = await client.query(`DELETE FROM unidade WHERE id_unidade = '${unityId}' `);
-    client.end();
-    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
     
+    return await client.query(`DELETE FROM unity WHERE id_unity = '${unityId}' `);
 
   }
   catch(error){
+    throw error;   
  
-    console.log("Delete DATABASE Error: ", error)
-    return {"error":error};
- 
+  }
+  finally{
+    client.end();
   }
 
   

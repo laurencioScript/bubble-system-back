@@ -26,7 +26,7 @@ const getUsers = async (values) => {
 
     //select * from userx where name_user like 'oo%' order by name_user desc limit 5 offset 1;
     let query = 'select * from userx ';
-    if(values.name || values.level){
+    if(values.name || values.level || values.email){
       query += 'where ';
       query += values.name ? `name_user like '%${values.name}%' ` :""
       query += values.email ? `email like '%${values.email}%' ` :""

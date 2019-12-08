@@ -69,6 +69,7 @@ router.get('/', async (req, res) => {
             name: Joi.string().min(1).max(30).lowercase(),
             level: Joi.number().integer().min(1).max(3)
         });
+        
 
         const resultValidate = Joi.validate(req.query, SchemaUser);
         
@@ -107,7 +108,6 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
 
     try {
-        
         
         const SchemaUser = Joi.object().keys({ id: Joi.string().required() });
     
@@ -218,7 +218,7 @@ router.delete('/:id', async (req, res) => {
             return res.status(400).send({error:"The id is not valid" });
         }
         
-        const result = await User.deleteUser(req.params.id);
+        const result = await User.deleteUser(resultValidate.value.id);
     
         if(result.rowCount < 1){
             return res.status(404).send({error:'Not found'});
