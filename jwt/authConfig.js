@@ -38,9 +38,6 @@ exports.getMiddleware = (req,res,next) =>{
 
  
 exports.hasPermissions = (req,res,min_level_required) => {
-    
-    console.log(req.userLevel);
-    
 
     if(!req.userLevel){
         return  res.status(401).send({error:'Level invalid'})
@@ -49,5 +46,5 @@ exports.hasPermissions = (req,res,min_level_required) => {
     if(req.userLevel < min_level_required){
         return  res.status(401).send({error:'No permission'})
     }
-    
+
 }

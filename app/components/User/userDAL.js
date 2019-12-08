@@ -9,7 +9,7 @@ const createUsers =  async (user) => {
 
     
     return await client.query(`insert into userx values 
-         ('${uuidV4()}','${user.name}','${user.password}','${user.email}','${user.level}') `);
+         ('${user.id}','${user.name}','${user.password}','${user.email}','${user.level}') `);
     
   }
   catch(error){

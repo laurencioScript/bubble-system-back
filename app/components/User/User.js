@@ -5,6 +5,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
 const { isUuid }  = require('uuidv4');
+const uuidV4 = require('uuid/v4');
 
 router.use(JWT.getMiddleware);
 
@@ -32,6 +33,8 @@ router.post('/register', async (req, res) => {
         }
 
         resultValidate.value.password = await bcrypt.hash( resultValidate.value.password, 10);
+
+        resultValidate.value.id = uuidV4();
 
         await User.createUsers( resultValidate.value);
         

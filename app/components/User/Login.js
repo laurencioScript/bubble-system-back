@@ -51,10 +51,11 @@ router.post('/', async(req,res)=>{
     if(error.detail){
         return res.status(400).send({error:error.detail});
     }
-    
-    return res.status(400).send({"error":"Has error"});
-}
+    else{
+      return res.status(400).send({"error":"Has error"});
 
+    }
+  }
+})
 
-module.exports = app => app.use('/login',router);
-
+module.exports = app => app.use('/login',router)
