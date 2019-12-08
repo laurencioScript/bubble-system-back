@@ -1,156 +1,136 @@
-ALTER TABLE IF EXISTS cliente DROP CONSTRAINT FK_CLIENTE_INFO;
-ALTER TABLE IF EXISTS cliente DROP CONSTRAINT FK_CLIENTE_ENDERECO;
-ALTER TABLE IF EXISTS servico DROP CONSTRAINT FK_SERVICO_PAGAMENTO;
-ALTER TABLE IF EXISTS servico DROP CONSTRAINT FK_SERVICO_CLIENTE;
-ALTER TABLE IF EXISTS cliente_contato DROP CONSTRAINT FK_CONTATO_CLIENTE;
-ALTER TABLE IF EXISTS item DROP CONSTRAINT FK_ITEM_SERVICO;
-ALTER TABLE IF EXISTS item DROP CONSTRAINT FK_ITEM_PECA;
-ALTER TABLE IF EXISTS cor_item DROP CONSTRAINT FK_COR_ITEM;
-ALTER TABLE IF EXISTS defeito_item DROP CONSTRAINT FK_DEFEITO_ITEM;
-ALTER TABLE IF EXISTS caracteristica_item DROP CONSTRAINT FK_CARACTERISTICA_ITEM;
+ALTER TABLE IF EXISTS client DROP CONSTRAINT FK_CLIENT_INFO;
+ALTER TABLE IF EXISTS client DROP CONSTRAINT FK_CLIENT_ADDRESS;
+ALTER TABLE IF EXISTS service DROP CONSTRAINT FK_SERVICE_PAYMENT;
+ALTER TABLE IF EXISTS item DROP CONSTRAINT FK_ITEM_SERVICE;
 
-
-
-DROP TABLE IF EXISTS usuario;
-DROP TABLE IF EXISTS cliente_info;
-DROP TABLE IF EXISTS cliente;
-DROP TABLE IF EXISTS cliente_endereco;
-DROP TABLE IF EXISTS servico;
-DROP TABLE IF EXISTS servico_cliente;
-DROP TABLE IF EXISTS pagamento;
+DROP TABLE IF EXISTS userx;
+DROP TABLE IF EXISTS client_info;
+DROP TABLE IF EXISTS client;
+DROP TABLE IF EXISTS client_address;
+DROP TABLE IF EXISTS service;
+DROP TABLE IF EXISTS service_client;
+DROP TABLE IF EXISTS payment;
 DROP TABLE IF EXISTS item;
-DROP TABLE IF EXISTS cor_item;
-DROP TABLE IF EXISTS defeito_item;
-DROP TABLE IF EXISTS peca;
-DROP TABLE IF EXISTS caracteristica_item;
-DROP TABLE IF EXISTS cor;
-DROP TABLE IF EXISTS defeito;
+DROP TABLE IF EXISTS color_item;
+DROP TABLE IF EXISTS defect_item;
+DROP TABLE IF EXISTS piece;
+DROP TABLE IF EXISTS characteristic_item;
+DROP TABLE IF EXISTS color;
+DROP TABLE IF EXISTS defect;
 DROP TABLE IF EXISTS unidade;
-DROP TABLE IF EXISTS caracteristica;
+DROP TABLE IF EXISTS characteristic;
 
 
-create table usuario(
-id_usuario uuid primary key,
-nome varchar(100) ,
-senha varchar(100) ,
+create table userx(
+id_user uuid primary key,
+name_user varchar(100) ,
+password_user varchar(100) ,
 email varchar(100) unique ,
-nivel int 
+level_user int 
 );
 
 
 
-create table cliente_info(
-id_cliente_info uuid primary key,
+create table client_info(
+id_client_info uuid primary key,
 cpf_cnpj varchar(20) UNIQUE,
-tipo varchar(1),
-nome varchar(100),
-razao_social varchar(100),
+type_client varchar(1),
+name_client varchar(100),
+corporate_name varchar(100),
 email varchar(100) unique,
-observacao_descricao varchar(300),
-observacao_cor varchar(30),
-contato text[]
+observation_description varchar(300),
+observation_color varchar(30),
+contact text[]
 );
 
-create table cliente_endereco(
-id_cliente_endereco uuid primary key,
-endereco varchar(100),
-numero varchar(10),
-complemento varchar(50),
-bairro varchar(50),
-cidade varchar(50),
-estado varchar(50),
+create table client_address(
+id_client_address uuid primary key,
+address_client varchar(100),
+phone_number varchar(10),
+complement varchar(50),
+neighborhood varchar(50),
+city varchar(50),
+state_city varchar(50),
 cep varchar(20)
 );
 
 
 
-create table cliente(
-id_cliente uuid primary key,
-cliente_info_id uuid,
-cliente_endereco_id uuid
+create table client(
+id_client uuid primary key,
+client_info_id uuid,
+client_address_id uuid
 );
 
-alter table cliente add constraint FK_CLIENTE_INFO foreign key (cliente_info_id) references cliente_info(id_cliente_info);
+alter table client add constraint FK_CLIENT_INFO foreign key (client_info_id) references client_info(id_client_info);
+alter table client add constraint FK_CLIENT_ADDRESS foreign key (client_address_id) references client_address(id_client_address);
 
-alter table cliente add constraint FK_CLIENTE_ENDERECO foreign key (cliente_endereco_id) references cliente_endereco(id_cliente_endereco);
-
-
-
-
-create table servico(
-id_servico uuid primary key,
-pagamento_id uuid,
-data_entrada timestamp,
-data_entrega timestamp,
-data_pagamento timestamp,
-data_retirada timestamp,
-observacao varchar(100),
-situacao varchar(40),
-cliente json
+create table service(
+id_service uuid primary key,
+payment_id uuid,
+date_input timestamp,
+date_ouput timestamp,
+date_payment timestamp,
+date_removed timestamp,
+observation varchar(100),
+situation varchar(40),
+client json
 );
 
-create table pagamento(
-id_pagamento uuid primary key,
-cartao_debito decimal,
-cartao_credito decimal,
-cheque decimal,
-dinheiro decimal,
-desconto int,
-valor_pago decimal,
-valor_total decimal
+create table payment(
+id_payment uuid primary key,
+debit_card decimal,
+credit_card decimal,
+check_pay decimal,
+money_pay decimal,
+discount int,
+amount_paid decimal,
+value_total decimal
 );
 
-alter table servico add constraint FK_SERVICO_PAGAMENTO foreign key (pagamento_id) references pagamento(id_pagamento);
-
-
+alter table service add constraint FK_SERVICE_PAYMENT foreign key (payment_id) references payment(id_payment);
 
 create table item(
 id_item  uuid primary key,
-servico_id uuid,
-peca varchar(30),
-quantidade int,
-unidade varchar(50),
-valor_unitario decimal,
-valor_total decimal,
-cores JSON,
-defeitos JSON,
-caracteristicas JSON
+service_id uuid,
+piece varchar(30),
+amount int,
+unity varchar(50),
+value_unity decimal,
+value_total decimal,
+colors JSON,
+defects JSON,
+characteristics JSON
 );
 
-
-
-create table peca(
-id_peca  uuid primary key,
-peca varchar(100),
-unidade varchar(50),
-valor decimal
+create table piece(
+id_piece  uuid primary key,
+piece_name varchar(100),
+unity varchar(50),
+value decimal
 );
 
+alter table item add constraint FK_ITEM_SERVICE foreign key (service_id) references service(id_service);
 
-
-alter table item add constraint FK_ITEM_SERVICO foreign key (servico_id) references servico(id_servico);
-
-
-
-create table cor(
-id_cor uuid primary key,
-cor_nome varchar(20),
+create table color(
+id_color uuid primary key,
+color_name varchar(20),
 hexadecimal varchar(20) unique
 );
 
-create table defeito(
-id_defeito uuid primary key,
-defeito varchar(50)
+create table defect(
+id_defect uuid primary key,
+defect_name varchar(50)
 );
 
-create table unidade(
-id_unidade uuid primary key,
-unidade varchar(50) 
+create table unity(
+id_unity uuid primary key,
+unity_name varchar(50) 
 );
 
-create table caracteristica(
-id_caracteristica uuid primary key,
-caracteristica varchar(50)
+create table characteristic(
+id_characteristic uuid primary key,
+characteristic_name varchar(50)
 );
 
 
