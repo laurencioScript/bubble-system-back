@@ -4,46 +4,59 @@ const uuidV4 = require('uuid/v4');
 const createPiece =  async (piece) => {
   const client = connect();
   try{
-    await client.query(`insert into peca values 
-         ('${uuidV4()}','${piece.peca}','${piece.unidade}','${piece.valor}') `);
 
-    return {"result":true};
+    return await client.query(`insert into piece values 
+         ('${piece.id}','${piece.name}','${piece.unity}','${piece.value}') `);
+
   }
   catch(error){
-    console.log("Database Error: ", error);
-    return {"error":error};
+    throw error;   
   }
-  client.end();
+  finally{
+    client.end();
+  }
 
 }
 
 
-const getPieces = async () => {
+const getPieces = async (values) => {
   const client = connect();
   try{
 
-    const result =  await client.query('select * from peca');
-    return {"result":result.rows};
+    let query = 'select * from piece ';
+    if(values.name || values.unity ||  values.value){
+      query += 'where ';
+      query += values.name ? `piece_name like '%${values.name}%' ` :"";
+      query += values.name ? `unity like '%${values.unity}%' ` :"";
+      query += values.name ? `value like '%${values.value}%' ` :"";
+    }
+
+    query += `order by piece_name desc limit '${values.limit}' offset '${values.offset}'`;
+
+    return await client.query(query);    
+    
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
   }
-  client.end();
+  finally{
+    client.end();
+  }
 }
 
 const getPiece = async (pieceId) => {
   const client = connect();
   try{
     
-    const result = await client.query(`select * from peca where id_peca = '${pieceId}'`);
-    return {"result":result.rows};
+    return await client.query(`select * from piece where id_piece = '${pieceId}'`);
+    
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
   }
-  client.end();
+  finally{
+    client.end();
+  }
 }
 
 
@@ -51,20 +64,20 @@ const updatePiece = async (piece) => {
   const client = connect();
   try{
 
-    const result = await client.query(`UPDATE peca 
-    SET peca = '${piece.peca}', 
-    unidade = '${piece.unidade}',
-    valor = '${piece.valor}'  
-    where id_peca = '${piece.id}' `);
+    let query = `UPDATE piece SET `;
+    query += piece.name ? ` piece_name = '${piece.name}' ` : ""; 
+    query += piece.unity ? ` unity = '${piece.unity}' ` : ""; 
+    query += piece.value ? ` value = '${piece.value}' ` : ""; 
+    query += ` WHERE id_piece = '${piece.id}'`;  
     
-    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
-  
+    return await client.query(query);   
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
   }
-  client.end();
+  finally{
+    client.end();
+  }
   
 }
 
@@ -73,19 +86,16 @@ const deletePiece = async (pieceId) => {
   const client = connect();
   try{
 
-    const result = await client.query(`DELETE FROM peca WHERE id_peca = '${pieceId}' `);
-    
-    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
-    
-
+    return await client.query(`DELETE FROM piece WHERE id_piece = '${pieceId}' `);
+  
   }
   catch(error){
- 
-    console.log("Delete DATABASE Error: ", error)
-    return {"error":error};
- 
+    throw error;   
   }
-  client.end();
+  finally{
+    
+    client.end();
+  }
   
 }
 
