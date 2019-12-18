@@ -74,6 +74,7 @@ const updateUser = async (user) => {
     query += user.password ? ` password_user = '${user.password}' ,` : ""; 
     query += user.level ? ` level_user = '${user.level}' ` : ""; 
     query += ` WHERE id_user = '${user.id}'`;  
+    console.log(query);
     
     return await client.query(query);
   

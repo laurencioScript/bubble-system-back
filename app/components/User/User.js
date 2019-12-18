@@ -2,7 +2,7 @@ const express = require('express');
 const User = require('./userDAL');
 const JWT= require('./../../../jwt/authConfig');
 const router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const Joi = require('joi');
 const { isUuid }  = require('uuidv4');
 const uuidV4 = require('uuid/v4');
@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
             return res.status(400).send({error:resultValidate.error.details[0].message });
         }
     
-        if(resultValidate.value.level >= req.userLevel){
+        if(resultValidate.value.level <= req.userLevel){
             return res.status(400).send({error:'Se ta louco ?'});
         }
 
