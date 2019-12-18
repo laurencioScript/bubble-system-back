@@ -5,65 +5,81 @@ const createDefect =  async (defect) => {
   const client = connect();
   try{
     
-    await client.query(`insert into defeito  values 
-         ('${uuidV4()}','${defect.defect}') `);
+    return  await client.query(`insert into defect  values 
+         ('${defect.id}','${defect.defect}') `);
 
-    return {"result":true};
   }
   catch(error){
-    console.log("Database Error: ", error);
-    return {"error":error};
+    throw error;   
   }
-  client.end();
+  finally{
+    
+    client.end();
+  }
 
 }
 
 
-const getDefects = async () => {
+const getDefects = async (values) => {
   const client = connect();
   try{
 
-    const result =  await client.query('select * from defeito');
-    return {"result":result.rows};
+    let query = 'select * from defect ';
+    if(values.name ){
+      query += 'where ';
+      query += values.name ? `defect_name like '%${values.name}%' ` :"";
+    }
+
+    query += `order by defect_name desc limit '${values.limit}' offset '${values.offset}'`;
+
+    return await client.query(query);
+    
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
   }
-  client.end();
+  finally{
+    
+    client.end();
+  }
 }
 
 const getDefect = async (defectId) => {
   const client = connect();
   try{
     
-    const result = await client.query(`select * from defeito where id_defeito = '${defectId}'`);
-    return {"result":result.rows};
+    return await client.query(`select * from defect where id_defect = '${defectId}'`);
+   
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
   }
-client.end();
+  finally{
+    
+    client.end();
+  }
 }
 
 
 const updateDefect = async (defect) => {
+  const defectExist = await getDefect(defect.id);
   const client = connect();
   try{
 
-    const result = await client.query(`UPDATE defeito 
-    SET defeito = '${defect.defect}'
-    where id_defeito = '${defect.id}' `);
+    return await client.query(`UPDATE defect 
+    SET defect_name = '${defect.defect ? defect.defect : defectExist.defect }'
+    where id_defect = '${defect.id}' `);
     
-    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
+    
   
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
   }
-client.end();
+  finally{
+    
+    client.end();
+  }
   
 }
 
@@ -72,19 +88,18 @@ const deleteDefect = async (defectId) => {
   const client = connect();
   try{
 
-    const result = await client.query(`DELETE FROM defeito WHERE id_defeito = '${defectId}' `);
+    return await client.query(`DELETE FROM defect WHERE id_defect = '${defectId}' `);
     
-    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
     
 
   }
   catch(error){
- 
-    console.log("Delete DATABASE Error: ", error)
-    return {"error":error};
- 
+    throw error;   
   }
-client.end();
+  finally{
+    
+    client.end();
+  }
   
 }
 
