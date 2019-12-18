@@ -5,46 +5,49 @@ const createCharacteristic =  async (charac) => {
   const client = connect();
   try{
     
-    await client.query(`insert into caracteristica values 
-         ('${uuidV4()}','${charac.caracteristica}') `);
-
-    return {"result":true};
+    return await client.query(`insert into characteristic values 
+         ('${charac.id}','${charac.name}') `);
   }
   catch(error){
-    console.log("Database Error: ", error);
-    return {"error":error};
+    throw error;   
   }
-  client.end();
+  finally{
+    client.end();
+  }
 
 }
 
 
-const getCharacteristics = async () => {
+const getCharacteristics = async (values) => {
   const client = connect();
   try{
 
-    const result =  await client.query('select * from caracteristica');
-    return {"result":result.rows};
+    let where = (values.name) ? ` where characteristic_name like '%${values.name}%' ` : "";
+    
+    return  await client.query(`select * from characteristic  ${where} order by characteristic_name desc limit '${values.limit}' offset '${values.offset}'`);
+    
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
   }
-  client.end();
+  finally{
+    client.end();
+  }
 }
 
 const getCharacteristic = async (characId) => {
   const client = connect();
   try{
     
-    const result = await client.query(`select * from caracteristica where id_caracteristica = '${characId}'`);
-    return {"result":result.rows};
+    return await client.query(`select * from characteristic where id_characteristic = '${characId}'`);
+   
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
   }
-  client.end();
+  finally{
+    client.end();
+  }
 }
 
 
@@ -52,19 +55,17 @@ const updateCharacteristic = async (charac) => {
   const client = connect();
   try{
 
-    const result = await client.query(`UPDATE caracteristica 
-    SET caracteristica = '${charac.caracteristica}'
-    where id_caracteristica = '${charac.id}' `);
-    
-    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
-  
+    return await client.query(`UPDATE characteristic 
+    SET characteristic_name = '${charac.name}'
+    where id_characteristic = '${charac.id}' `); 
+
   }
   catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+    throw error;   
   }
-client.end();
-  
+  finally{
+    client.end();
+  }
 }
 
 
@@ -72,20 +73,16 @@ const deleteCharacteristic = async (characId) => {
   const client = connect();
   try{
 
-    const result = await client.query(`DELETE FROM caracteristica WHERE id_caracteristica = '${characId}' `);
-    
-    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
-    
+    return await client.query(`DELETE FROM characteristic WHERE id_characteristic = '${characId}' `);
+ 
 
   }
   catch(error){
- 
-    console.log("Delete DATABASE Error: ", error)
-    return {"error":error};
- 
+    throw error;   
   }
-client.end();
-  
+  finally{
+    client.end();
+  }
 }
 
 module.exports = {createCharacteristic,getCharacteristic,getCharacteristics,updateCharacteristic,deleteCharacteristic};
