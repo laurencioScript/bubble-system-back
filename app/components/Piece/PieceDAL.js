@@ -61,14 +61,13 @@ const getPiece = async (pieceId) => {
 
 
 const updatePiece = async (piece) => {
+  const pieceExist = await getPiece(piece.id);
+
   const client = connect();
   try{
 
-    let query = `UPDATE piece SET `;
-    query += piece.name ? ` piece_name = '${piece.name}' ` : ""; 
-    query += piece.unity ? ` unity = '${piece.unity}' ` : ""; 
-    query += piece.value ? ` value = '${piece.value}' ` : ""; 
-    query += ` WHERE id_piece = '${piece.id}'`;  
+    let query = `UPDATE piece SET piece_name = '${piece.name ? piece.name : pieceExist.name }', unity = '${piece.unity ? piece.unity : pieceExist.unity}', value = ${piece.value ? piece.value : pieceExist.value} WHERE id_piece = '${piece.id}'`;
+  
     
     return await client.query(query);   
   }

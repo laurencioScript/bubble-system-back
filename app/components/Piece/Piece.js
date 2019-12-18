@@ -150,6 +150,8 @@ router.put('/:id', async (req, res) => {
         const resultValidate = Joi.validate({"id":req.params.id,...req.body}, SchemaPiece);
 
         if(resultValidate.error !== null){
+            console.log('pizza');
+            
             return res.status(400).send({error:resultValidate.error.details[0].message });
         }
 
@@ -171,7 +173,6 @@ router.put('/:id', async (req, res) => {
 
         console.log(error);
         
-
         if(error.detail){
             return res.status(400).send({error:error.detail});
         }
