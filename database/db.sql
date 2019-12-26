@@ -93,7 +93,7 @@ alter table service add constraint FK_SERVICE_PAYMENT foreign key (payment_id) r
 create table item(
 id_item  uuid primary key,
 service_id uuid,
-piece varchar(30),
+piece varchar(30), 
 amount int,
 unity varchar(50),
 value_unity decimal,

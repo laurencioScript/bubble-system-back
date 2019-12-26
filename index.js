@@ -17,6 +17,7 @@ require('./app/components/Characteristic/Characteristic')(app);
 require('./app/components/Defect/Defect')(app);
 require('./app/components/Service/Service')(app);
 require('./app/components/Item/Item')(app);
+require('./app/components/Payment/payment')(app);
 
 
 app.listen(3000, () => console.log('Serve ON, PORT:3000'));
