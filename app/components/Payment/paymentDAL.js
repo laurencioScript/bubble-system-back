@@ -3,6 +3,7 @@ const uuidV4 = require('uuid/v4');
 
 
 const createPayment =  async (payment) => {
+  
   const client = connect();
   try{
  
@@ -74,7 +75,7 @@ const updatePayment = async (payment) => {
     update += payment.amount_paid ? `amount_paid = ${payment.amount_paid}` : ``;
     update += payment.amount_paid != "" ? ", ":"";
     update += payment.value_total ? `value_total = ${payment.value_total}` : ``;
-    console.log(update);
+    
     
     return await client.query(`UPDATE payment 
     SET ${update}
@@ -97,7 +98,7 @@ const updatePayment = async (payment) => {
 const deletePayment = async (paymentId) => {
   const client = connect();
   try{
-
+    
     return await client.query(`DELETE FROM payment WHERE id_payment = '${paymentId}' `);
 
   }

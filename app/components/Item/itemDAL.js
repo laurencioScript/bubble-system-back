@@ -1,107 +1,130 @@
-const {connect} = require('./../../../database');
-const uuidV4 = require('uuid/v4');
+const { connect } = require('./../../../database');
 
-const createItem  = async(item) => {
-    console.log(item)
-    const client = connect();
-    try {
-        await client.query('BEGIN');
 
-        await client.query(`insert into item  
-            values ('${uuidV4()}','${item.servico_id}','${item.quantidade}','${item.unidade}',
-            '${item.valor_unitario}','${item.valor_total}',
-            '${item.peca}', '${JSON.stringify(item.cores)}', 
-            '${JSON.stringify(item.defeitos)}',
-            '${JSON.stringify(item.caracteristicas)}')`)
+const createItem = async (item) => {
 
-        await client.query('COMMIT');
-        return {"result":true};
+  const client = connect();
+  try {
 
-    } catch (error) {
+    await client.query('BEGIN');
     
-        await client.query('ROLLBACK');
-        console.log("Database Error: ", error);
-        return {"error":error};
-    }
+    const result = await client.query(`insert into item  
+    (id_item, service_id, piece, amount, unity, value_unity, value_total, colors, defects, characteristics)
+    values ('${item.id}','${item.service_id}','${item.piece}','${item.amount}','${item.unity}',
+    '${item.value_unity}','${item.value_total}','${JSON.stringify(item.colors)}', 
+    '${JSON.stringify(item.defects)}',
+    '${JSON.stringify(item.characteristics)}')`)
+
+    await client.query('COMMIT');
+
+    return result;
+
+  }
+  catch (error) {
+
+    throw error;
+  
+  }
+  finally {
+
     client.end();
+
+  }
 
 }
 
 
-const getAllItems = async () => {
+const getAllItems = async (values) => {
   const client = connect();
-  try{
+  try {
 
-    const result =  await client.query('select * from item');
-    
-    return {"result":result.rows};
+    return await client.query(`select * from item 
+    where 
+        item.service_id  ${values.service_id ? "= item.service_id , ": "is not null ,"} 
+        order by piece desc limit '${values.limit}' offset '${values.offset}'`);
+
+
   }
-  catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+  catch (error) {
+
+    throw error;
+  
   }
-  client.end();
+  finally {
+
+    client.end();
+
+  }
 }
 
 const getOneItem = async (itemId) => {
   const client = connect();
-  try{
-    
-    const result =  await client.query(`select * from item where id_item = '${itemId}' `);
+  try {
 
-    return {"result":result.rows};
+    return await client.query(`select * from item where id_item = '${itemId}' `);
+
   }
-  catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+  catch (error) {
+
+    throw error;
+  
   }
-client.end();
+  finally {
+
+    client.end();
+
+  }
 }
 
 
 const updateItems = async (item) => {
+  
   const client = connect();
-  try{
-    console.log(item)
-    const result = await client.query(`update item SET
-    quantidade ='${item.quantidade}',
-    unidade ='${item.unidade}', valor_unitario ='${item.valor_unitario}',
-    valor_total='${item.valor_total}', peca = '${item.peca}', 
-    defeitos ='${JSON.stringify(item.defeitos)}',cores = '${JSON.stringify(item.cores)}',
-    caracteristicas = '${JSON.stringify(item.caracteristicas)}' where id_item = '${item.id}'
-    `);
+
+  try {
+
+    return await client.query(`update item SET
+    amount ='${item.amount}',
+    unity ='${item.unity}', value_unity ='${item.value_unity}',
+    value_total='${item.value_total}', piece = '${item.piece}', 
+    defects ='${JSON.stringify(item.defects)}',colors = '${JSON.stringify(item.colors)}',
+    characteristics = '${JSON.stringify(item.characteristics)}' where id_item = '${item.id_item}'`);
 
 
-    return (result.rowCount > 0 ) ? {"result":true}: {"error":"Not found"};
+  }
+  catch (error) {
+
+    throw error;
   
   }
-  catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+  finally {
+
+    client.end();
+
   }
-client.end();
-  
+
 }
 
 
 const deleteItem = async (itemId) => {
   const client = connect();
-  try{
+  try {
 
-    const result = await client.query(`DELETE FROM item WHERE id_item = '${itemId}' `);
-    
-    return (result.rowCount > 0) ? {"result":true}: {"error":"Not found"};
-    
+    return await client.query(`DELETE FROM item WHERE id_item = '${itemId}' `);
+
 
   }
-  catch(error){
- 
-    console.log("Delete DATABASE Error: ", error)
-    return {"error":error};
- 
-  }
-client.end();
+  catch (error) {
+
+    throw error;
   
+  }
+  finally {
+
+    client.end();
+
+  }
+
 }
 
-module.exports = {createItem,getOneItem,getAllItems,updateItems,deleteItem};
+module.exports = { createItem, getOneItem, getAllItems, updateItems, deleteItem };

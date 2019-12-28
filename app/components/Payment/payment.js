@@ -24,13 +24,13 @@ router.post('/register', async (req, res) => {
             value_total:Joi.number()
         });
 
-        const resultValidate = Joi.validate(req.body, Schema);
+        const resultValidate = Joi.validate({...req.body,id:req.params}, Schema);
         
         if(resultValidate.error !== null){
             return res.status(400).send({error:resultValidate.error.details[0].message });
         }
-    
-        resultValidate.value.id = uuidV4();
+
+        resultValidate.value.id =  uuidV4();
 
         await Payment.createPayment(resultValidate.value);
         
