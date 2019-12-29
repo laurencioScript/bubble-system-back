@@ -77,7 +77,8 @@ router.post('/register', async (req, res) => {
                 discount:Joi.number().integer(),
                 amount_paid:Joi.number(),
                 value_total:Joi.number()
-            })
+            }).required(),
+            itens:Joi.array().required()
         });
 
         const resultValidate = Joi.validate(req.body, Schema);
@@ -159,6 +160,7 @@ router.put('/:id', async (req, res) => {
 
         const Schema = Joi.object().keys({
             id_service:Joi.string().required(),
+            payment_id:Joi.string(),
             date_input:Joi.string(),
             date_ouput:Joi.string(),
             date_payment:Joi.string(),
@@ -167,6 +169,7 @@ router.put('/:id', async (req, res) => {
             situation:Joi.string(),
             client:Joi.object(),
             payment:Joi.object().keys({
+                id_payment:Joi.string().required(),
                 debit_card:Joi.number(),
                 credit_card:Joi.number(),
                 check_pay:Joi.number(),
@@ -174,7 +177,8 @@ router.put('/:id', async (req, res) => {
                 discount:Joi.number().integer(),
                 amount_paid:Joi.number(),
                 value_total:Joi.number()
-            })
+            }),
+            itens:Joi.array().required()
         });
         
         const resultValidate = Joi.validate({"id_service":req.params.id,...req.body}, Schema);

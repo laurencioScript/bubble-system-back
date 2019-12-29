@@ -37,10 +37,10 @@ const createItem = async (item) => {
 const getAllItems = async (values) => {
   const client = connect();
   try {
-
+    
     return await client.query(`select * from item 
     where 
-        item.service_id  ${values.service_id ? "= item.service_id , ": "is not null ,"} 
+        item.service_id  ${values.service_id ? `= '${values.service_id}'  `: "is not null "} 
         order by piece desc limit '${values.limit}' offset '${values.offset}'`);
 
 
@@ -95,7 +95,8 @@ const updateItems = async (item) => {
   catch (error) {
 
     throw error;
-  
+    
+    
   }
   finally {
 

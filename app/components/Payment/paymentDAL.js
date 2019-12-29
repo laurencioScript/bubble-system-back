@@ -62,29 +62,30 @@ const updatePayment = async (payment) => {
 
     let update = "";
     
-    update += payment.debit_card ? `debit_card = ${payment.debit_card}` : ``;
-    update += payment.debit_card != "" ? ", ":"";
-    update += payment.credit_card ? `credit_card = ${payment.credit_card}` : ``;
-    update += payment.credit_card != "" ? ", ":"";
-    update += payment.check_pay ? `check_pay = ${payment.check_pay}` : ``;
-    update += payment.check_pay != "" ? ", ":"";
-    update += payment.money_pay ? `money_pay = ${payment.money_pay}` : ``;
-    update += payment.money_pay != "" ? ", ":"";
-    update += payment.discount ? `discount = ${payment.discount}` : ``;
-    update += payment.discount != "" ? ", ":"";
-    update += payment.amount_paid ? `amount_paid = ${payment.amount_paid}` : ``;
-    update += payment.amount_paid != "" ? ", ":"";
-    update += payment.value_total ? `value_total = ${payment.value_total}` : ``;
+    update += payment.debit_card != undefined ? `debit_card = '${payment.debit_card}' ` : ``;
+    update += payment.debit_card != undefined ? ", ":"";
+    update += payment.credit_card != undefined ? `credit_card = '${payment.credit_card}'` : ``;
+    update += payment.credit_card != undefined ? ", ":"";
+    update += payment.check_pay != undefined ? `check_pay = '${payment.check_pay}' ` : ``;
+    update += payment.check_pay != undefined ? ", ":"";
+    update += payment.money_pay != undefined ? `money_pay = '${payment.money_pay}'` : ``;
+    update += payment.money_pay != undefined ? ", ":"";
+    update += payment.discount != undefined ? `discount = '${payment.discount}'` : ``;
+    update += payment.discount != undefined ? ", ":"";
+    update += payment.amount_paid != undefined ? `amount_paid = '${payment.amount_paid}'` : ``;
+    update += payment.amount_paid != undefined ? ", ":"";
+    update += payment.value_total != undefined ? `value_total = '${payment.value_total}'` : ``;
     
     
     return await client.query(`UPDATE payment 
     SET ${update}
-    where id_payment = '${payment.id}' `);
+    where id_payment = '${payment.id || payment.id_payment}' `);
     
     
   
   }
   catch(error){
+    
     throw error;   
   }
   finally{

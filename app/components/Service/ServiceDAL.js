@@ -1,10 +1,13 @@
 const { connect } = require('./../../../database');
 const Payment = require('./../Payment/paymentDAL');
+const Item = require('./../Item/itemDAL');
+const uuidV4 = require('uuid/v4');
 
 const createService = async (service) => {
 
   const client = connect();
   const payment = service.payment;
+  const itens = service.itens;
   
   try {
 
@@ -16,6 +19,13 @@ const createService = async (service) => {
     values ('${service.id}','${payment.id}','${service.date_input}',
     '${service.date_ouput}','${service.date_payment}','${service.date_removed}',
     '${service.observation}','${service.situation}','${JSON.stringify(service.client)}')`);
+
+    itens.map(async item => {
+      item.id = uuidV4();
+      item.service_id = service.id;
+      await Item.createItem(item);
+ 
+    });
 
 
     await client.query('COMMIT');
@@ -40,9 +50,22 @@ const getAllServices = async () => {
   
   try {
     
-    return await client.query('select * from service join payment on payment.id_payment = service.payment_id');
+    const result = await client.query('select * from service ');
+    
+    for (const service of  result.rows) {
+      let aux = await Payment.getPayment(service.payment_id);
+      service.payment = aux.rowCount > 0 ? aux.rows[0] : null;
+    }
 
+    for (const service of  result.rows) {
+      let aux = await Item.getAllItems({service_id:service.id_service,limit:1000,offset:0});
+      
+      service.itens = aux.rowCount > 0 ? aux.rows : [];
+    }
+
+    return result;
   }
+  
   catch (error) {
     throw error;
   }
@@ -59,8 +82,21 @@ const getOneService = async (serviceId) => {
   
   try {
   
-    return await client.query(`select * from service join payment on id_payment = payment_id where id_service = '${serviceId}' `);
+    const result =  await client.query(`select * from service where id_service = '${serviceId}' `);
     
+    for (const service of  result.rows) {
+      let aux = await Payment.getPayment(service.payment_id);
+      service.payment = aux.rowCount > 0 ? aux.rows[0] : null;
+    }
+
+    for (const service of  result.rows) {
+      let aux = await Item.getAllItems({service_id:service.id_service,limit:1000,offset:0});
+      
+      service.itens = aux.rowCount > 0 ? aux.rows : [];
+    }
+
+    return result;
+
   }
   catch (error) {
     throw error;
@@ -81,8 +117,9 @@ const updateService = async (service) => {
     let serviceExist = await getOneService(service.id_service);
     serviceExist = serviceExist.rows[0];
     const payment = service.payment;
+    const itens  = service.itens;
     
-    return await client.query(`UPDATE service SET
+    const result =  await client.query(`UPDATE service SET
     date_input = '${service.date_input || serviceExist.date_input}', 
     date_ouput = '${service.date_ouput || serviceExist.date_ouput}',
     date_payment = '${service.date_payment || serviceExist.date_payment}',
@@ -92,9 +129,19 @@ const updateService = async (service) => {
     client = '${JSON.stringify(service.client || serviceExist.client)}'
     where id_service = '${service.id_service }' `);
     
+    
+    for (const item of itens) {
+      await Item.updateItems(item);
+    }
+
+    
+    await Payment.updatePayment(payment);
+    
+    return result;
 
   }
   catch (error) {
+    
     throw error;
   }
   finally {
@@ -110,11 +157,20 @@ const deleteService = async (serviceId) => {
   try {
     
     const service = await getOneService(serviceId);
+
     
+    const itens = await Item.getAllItems({service_id:serviceId,limit:1000,offset:0});
+   
+    
+    for (const item of itens.rows) {
+      
+      await Item.deleteItem(item.id_item)
+    }
     const result = await client.query(`DELETE FROM service WHERE id_service = '${serviceId}' `);
     
     await Payment.deletePayment(service.rows[0].payment_id);
-    
+
+
     return result;
 
   }
