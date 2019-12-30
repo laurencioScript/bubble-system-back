@@ -37,7 +37,7 @@ cpf_cnpj varchar(20) UNIQUE,
 type_client varchar(1),
 name_client varchar(100),
 corporate_name varchar(100),
-email varchar(100) unique,
+email varchar(100),
 observation_description varchar(300),
 observation_color varchar(30),
 contact text[]

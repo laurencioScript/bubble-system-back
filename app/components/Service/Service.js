@@ -91,9 +91,6 @@ router.post('/register', async (req, res) => {
         resultValidate.value.payment.id = uuidV4() ;
 
         const result = await Service.createService(resultValidate.value);
-        
-        console.log(result);
-        
 
         return res.status(200).send(resultValidate.value);
     }

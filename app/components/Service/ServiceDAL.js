@@ -134,7 +134,6 @@ const updateService = async (service) => {
       await Item.updateItems(item);
     }
 
-    
     await Payment.updatePayment(payment);
     
     return result;

@@ -1,33 +1,34 @@
 const {connect} = require('./../../../database');
 
 
-const createClient =  async ({info,end}) => {
+const createClient =  async (clientE) => {
   const client = connect();
   try{
-       
-        await client.query(`insert into cliente_info 
-        (cpf_cnpj,tipo,nome,razao_social,email,observacao_descricao,observacao_cor,contato)
-        values ('${info.cpf_cnpj}','${info.tipo}','${info.nome}','${info.razao_social}',
-        '${info.email}','${info.observacao}','${info.observacao_cor}', ARRAY [${info.contatos}])`);
-            
-        await client.query(`insert into cliente_endereco (endereco,numero,complemento,bairro,cidade,estado,cep)
-        values ('${end.endereco}','${end.numero}','${end.complemento}','${end.bairro}','${end.cidade}','${end.estado}','${end.cep}')`);
-
-        const idInfo = await client.query('select MAX(id_cliente_info) from cliente_info');
         
-        const idEndereco = await client.query('select MAX(id_cliente_endereco) from cliente_endereco');
+        const {info,end} = clientE;
+        
+        await client.query(`insert into client_info 
+        (id_client_info,cpf_cnpj,type_client,name_client,corporate_name,email,observation_description,observation_color,contact)
+        values ('${info.id}','${info.cpf_cnpj}','${info.type_client}','${info.name_client}','${info.corporate_name}',
+        '${info.email}','${info.observation_description}','${info.observation_color}', ARRAY [${info.contact}])`);
+            
+        await client.query(`insert into client_address (id_client_address, address_client,number,complement,neighborhood,city,state_city,cep)
+        values ('${end.id}','${end.address_client}','${end.number}','${end.complement}','${end.neighborhood}','${end.city}','${end.state_city}','${end.cep}')`);
 
-        await client.query(`insert into cliente (cliente_info_id,cliente_endereco_id) values
-        ('${idInfo.rows[0].max}','${idEndereco.rows[0].max}')`);
-
-        return {"result":true};
+    
+        return await client.query(`insert into client (id_client, client_info_id,client_address_id) values
+        ('${clientE.id}','${info.id}','${end.id}')`);
+  
 
   }
-  catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+  catch (error) {
+    
+    throw error;
   }
-  client.end();
+  finally {
+
+    client.end();
+  }
 
 }
 
@@ -36,92 +37,112 @@ const getClients = async () => {
   const client = connect();
   try{
 
-    const client = await client.query('select id_cliente,info.cpf_cnpj,info.tipo,info.nome,info.razao_social,info.email,info.observacao_descricao,info.observacao_cor,info.contato,ende.endereco,ende.numero,ende.complemento,ende.bairro,ende.cidade,ende.estado from cliente join cliente_info info on cliente_info_id = info.id_cliente_info join cliente_endereco ende on ende.id_cliente_endereco = cliente_endereco_id ;');
+    const result = await client.query(`
+            select  id_client,info.id_client_info,ende.id_client_address,
+                    info.cpf_cnpj,info.type_client,info.name_client,info.corporate_name,info.email,info.observation_description,info.observation_color,info.contact,
+                    ende.address_client,ende.number,ende.complement,ende.neighborhood,ende.city,ende.state_city ,ende.cep
+                    from client 
+                    join client_info info on info.id_client_info = client_info_id 
+                    join client_address ende on ende.id_client_address = client_address_id ;`);
 
-    return {"result":[client.rows]};
+    return result;
 
   }
-  catch(error){
-    console.log("Database Error: ", error);
-    return {"error":error};
+  catch (error) {
+    
+    throw error;
   }
-  client.end();
+  finally {
+
+    client.end();
+  }
 }
 
 const getClient = async (clientId) => {
   const client = connect();
   try{
 
-    const client = await client.query(`select id_cliente,info.cpf_cnpj,info.tipo,info.nome,info.razao_social,info.email,info.observacao_descricao,info.observacao_cor,info.contato,ende.endereco,ende.numero,ende.complemento,ende.bairro,ende.cidade,ende.estado from cliente join cliente_info info on cliente_info_id = info.id_cliente_info join cliente_endereco ende on ende.id_cliente_endereco = cliente_endereco_id  where id_cliente = '${clientId}';`);
-
-    return {"result":[client.rows]};
+    return await client.query(`select id_client,info.id_client_info,ende.id_client_address,
+    info.cpf_cnpj,info.type_client,info.name_client,info.corporate_name,info.email,info.observation_description,info.observation_color,info.contact,
+    ende.address_client,ende.number,ende.complement,ende.neighborhood,ende.city,ende.state_city ,ende.cep
+    from client 
+    join client_info info on info.id_client_info = client_info_id 
+    join client_address ende on ende.id_client_address = client_address_id  
+    where id_client = '${clientId}';`);
 
   }
-  catch(error){
-    console.log("Database Error: ", error)
-    return {"error":error};
+  catch (error) {
+    
+    throw error;
   }
-client.end();
+  finally {
+
+    client.end();
+  }
 }
 
 
-const updateClient = async (client) => {
-  const clientC = connect();
+const updateClient = async (clientE) => {
+  const client = connect();
   try{
     
-    const{info, end} = client;
+    const{info, end} = clientE;
     
-    const ids = await clientC.query(`select cliente_info_id, cliente_endereco_id from cliente where id_cliente = '${client.id}' `);
+    let clientExist = await getClient(clientE.id);
+    clientExist = clientExist.rows[0];
+    
+    let cpf = info.cpf_cnpj != clientExist.cpf_cnpj ? `cpf_cnpj = '${info.cpf_cnpj}', ` :``;
   
-    if(ids.rowCount <= 0){
-      return {"error":"Not found"};
-    }
 
-    await clientC.query(`UPDATE cliente_info SET cpf_cnpj = '${info.cpf_cnpj}',
-    tipo = '${info.tipo}',nome ='${info.nome}', razao_social = '${info.razao_social}', 
-    email = '${info.email}', observacao_descricao = '${info.observacao_desc}',
-    observacao_cor = '${info.observacao_cor}', contato = ARRAY ['${info.contatos}']
-    WHERE id_cliente_info = '${ids.rows[0].cliente_info_id}' `);
+    await client.query(`UPDATE client_info SET ${cpf}
+    type_client = '${info.type_client || clientExist.type_client }',name_client ='${info.name_client || clientExist.name_client }', 
+    corporate_name = '${info.corporate_name || clientExist.corporate_name }', 
+    email = '${info.email || clientExist.email }', observation_description = '${info.observacao_desc || clientExist.observacao_desc }',
+    observation_color = '${info.observation_color || clientExist.observation_color }', contact = ARRAY ['${info.contact || clientExist.contact }']
+    WHERE id_client_info = '${clientExist.id_client_info}' `);
   
-    await clientC.query(`UPDATE cliente_endereco SET 
-    endereco = '${end.endereco}', numero = '${end.numero}', complemento = '${end.complemento}', 
-    bairro = '${end.bairro}', cidade = '${end.cidade}', estado = '${end.estado}', cep = '${end.cep}'
-    WHERE id_cliente_endereco = '${ids.rows[0].cliente_endereco_id}' `);
+    return await client.query(`UPDATE client_address SET 
+    address_client = '${end.address_client || clientExist.address_client }', number = '${end.number || clientExist.number }', complement = '${end.complement || clientExist.complement }', 
+    neighborhood = '${end.neighborhood || clientExist.neighborhood }', city = '${end.city || clientExist.city }', state_city = '${end.state_city || clientExist.state_city }', cep = '${end.cep || clientExist.cep }'
+    WHERE id_client_address = '${clientExist.id_client_address}' `);
     
-    return {"result":true};
+    
 
   }
-  catch(error){
-    console.log("Database Error: ", error);
-    return {"error":error};
+  catch (error) {
+    
+    throw error;
   }
-  clientC.end();
+  finally {
+
+    client.end();
+  }
 }
 
 const deleteClient = async (clientId) => {
   const client = connect();
   try{
-
-    const ids = await client.query(`select cliente_info_id, cliente_endereco_id from cliente where id_cliente = '${clientId}' `);
-  
-    const result = await client.query(`DELETE FROM cliente where id_cliente = '${clientId}' `);
-
-    if(result.rowCount <= 0){
-      return {"error":"Not found"};
-    }
-
-    await client.query(`DELETE FROM cliente_info WHERE id_cliente_info = '${ids.rows[0].cliente_info_id}' `);
-  
-    await client.query(`DELETE FROM cliente_endereco WHERE id_cliente_endereco = '${ids.rows[0].cliente_endereco_id}' `);
     
-    return {"result":true};
+    let clientE = await getClients(clientId);
+    clientE = clientE.rows[0];
+    
+    const result = await client.query(`DELETE FROM client where id_client = '${clientId}' `);
+
+    await client.query(`DELETE FROM client_info WHERE id_client_info = '${clientE.id_client_info}' `);
+  
+    await client.query(`DELETE FROM client_address WHERE id_client_address = '${clientE.id_client_address}' `);
+    
+    return result;
 
   }
-  catch(error){
-    console.log("Database Error: ", error);
-    return {"error":error};
+  catch (error) {
+    
+    throw error;
   }
-client.end();
+  finally {
+
+    client.end();
+  }
   
 }
 
