@@ -6,7 +6,7 @@ const createDefect =  async (defect) => {
   try{
     
     return  await client.query(`insert into defect  values 
-         ('${defect.id}','${defect.defect}') `);
+         ('${defect.id}','${defect.name}') `);
 
   }
   catch(error){
