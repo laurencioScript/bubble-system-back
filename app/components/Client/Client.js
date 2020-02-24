@@ -60,27 +60,21 @@ router.post('/register', async (req, res) => {
         JWT.hasPermissions(req,res,2);
 
         const Schema = Joi.object().keys({
-            info:Joi.object().keys({
-                cpf_cnpj:Joi.string().required(),
-                type_client:Joi.string().required(),
-                name_client:Joi.string().lowercase().required(),
-                corporate_name:Joi.string().allow(""),
-                email:Joi.string().required(),
-                observation_description:Joi.string().allow(""),
-                observation_color:Joi.string().allow(""),
-                contact:Joi.array().required(),
-            }),
-            end:Joi.object().keys({
-                address_client:Joi.string(),
-                number:Joi.string().allow(""),
-                complement:Joi.string().allow(""),
-                neighborhood:Joi.string().allow(""),
-                city:Joi.string().allow(""),
-                state_city:Joi.string().allow(""),
-                cep:Joi.string().required(),
-            }),
-
-            
+            cpf_cnpj:Joi.string().required(),
+            type_client:Joi.string().required(),
+            name_client:Joi.string().lowercase().required(),
+            corporate_name:Joi.string().allow(""),
+            email:Joi.string().required(),
+            observation_description:Joi.string().allow(""),
+            observation_color:Joi.string().allow(""),
+            contact:Joi.array().required(),
+            address_client:Joi.string().allow(""),
+            number:Joi.string().allow(""),
+            complement:Joi.string().allow(""),
+            neighborhood:Joi.string().allow(""),
+            city:Joi.string().allow(""),
+            state_city:Joi.string().allow(""),
+            cep:Joi.string().allow("")
         });
 
         const resultValidate = Joi.validate(req.body, Schema);
@@ -90,8 +84,8 @@ router.post('/register', async (req, res) => {
         }
 
         resultValidate.value.id =  uuidV4();
-        resultValidate.value.end.id = uuidV4();
-        resultValidate.value.info.id = uuidV4();
+        resultValidate.value.idEnd = uuidV4();
+        resultValidate.value.idInfo = uuidV4();
 
 
         const result = await Client.createClient(resultValidate.value);

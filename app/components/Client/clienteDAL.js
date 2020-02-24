@@ -1,23 +1,20 @@
 const {connect} = require('./../../../database');
 
 
-const createClient =  async (clientE) => {
-  const client = connect();
+const createClient =  async (client) => {
+  const newConnect = connect();
   try{
-        
-        const {info,end} = clientE;
-        
-        await client.query(`insert into client_info 
+      
+        await newConnect.query(`insert into client_info 
         (id_client_info,cpf_cnpj,type_client,name_client,corporate_name,email,observation_description,observation_color,contact)
-        values ('${info.id}','${info.cpf_cnpj}','${info.type_client}','${info.name_client}','${info.corporate_name}',
-        '${info.email}','${info.observation_description}','${info.observation_color}', ARRAY [${info.contact}])`);
+        values ($1,$2,$3,$4,$5,$6,$7,$8, $9)`,
+        [client.idInfo, client.cpf_cnpj, client.type_client, client.name_client, client.corporate_name, client.email, client.observation_description, client.observation_color, client.contact]);
             
-        await client.query(`insert into client_address (id_client_address, address_client,number,complement,neighborhood,city,state_city,cep)
-        values ('${end.id}','${end.address_client}','${end.number}','${end.complement}','${end.neighborhood}','${end.city}','${end.state_city}','${end.cep}')`);
+        await newConnect.query(`insert into client_address (id_client_address, address_client,number,complement,neighborhood,city,state_city,cep)
+        values ('${client.idEnd}','${client.address_client}','${client.number}','${client.complement}','${client.neighborhood}','${client.city}','${client.state_city}','${client.cep}')`);
 
-    
-        return await client.query(`insert into client (id_client, client_info_id,client_address_id) values
-        ('${clientE.id}','${info.id}','${end.id}')`);
+        return await newConnect.query(`insert into client (id_client, client_info_id,client_address_id) values
+        ('${client.id}','${client.idInfo}','${client.idEnd}')`);
   
 
   }
@@ -27,7 +24,7 @@ const createClient =  async (clientE) => {
   }
   finally {
 
-    client.end();
+    newConnect.end();
   }
 
 }

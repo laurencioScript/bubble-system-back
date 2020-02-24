@@ -11,8 +11,7 @@ router.use(JWT.getMiddleware);
 
 router.get('/', async (req, res) => {
 
-    try{
-
+    try{    
         JWT.hasPermissions(req,res,1);
 
         const SchemaDefect = Joi.object().keys({ 
@@ -62,11 +61,11 @@ router.post('/register', async (req, res) => {
         JWT.hasPermissions(req,res,2);
 
         const Schema = Joi.object().keys({
-            date_input:Joi.string(),
-            date_ouput:Joi.string(),
-            date_payment:Joi.string(),
-            date_removed:Joi.string(),
-            observation:Joi.string(),
+            date_input:Joi.string().allow(null),
+            date_ouput:Joi.string().allow(null),
+            date_payment:Joi.string().allow(null),
+            date_removed:Joi.string().allow(null),
+            observation:Joi.string().allow(""),
             situation:Joi.string(),
             client:Joi.object(),
             payment:Joi.object().keys({

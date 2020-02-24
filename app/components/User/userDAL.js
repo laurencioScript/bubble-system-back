@@ -25,7 +25,7 @@ const getUsers = async (values) => {
   try{
 
     //select * from userx where name_user like 'oo%' order by name_user desc limit 5 offset 1;
-    let query = 'select * from userx ';
+    let query = 'select id_user,name_user,email,level_user from userx ';
     if(values.name || values.level || values.email){
       query += 'where ';
       query += values.name ? `name_user like '%${values.name}%' ` :""
@@ -114,9 +114,7 @@ const loginUser = async (user)=>{
     console.log(user);
     
     const result = await client.query(`SELECT id_user,name_user,email,level_user,password_user FROM userx WHERE email = '${user.email}'  `);  
-    
-   
-    
+
     return result;    
 
   }
