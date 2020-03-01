@@ -46,7 +46,7 @@ contact text[]
 create table client_address(
 id_client_address uuid primary key,
 address_client varchar(100),
-phone_number varchar(10),
+house_number varchar(10),
 complement varchar(50),
 neighborhood varchar(50),
 city varchar(50),

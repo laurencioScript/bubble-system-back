@@ -10,13 +10,12 @@ const createClient =  async (client) => {
         values ($1,$2,$3,$4,$5,$6,$7,$8, $9)`,
         [client.idInfo, client.cpf_cnpj, client.type_client, client.name_client, client.corporate_name, client.email, client.observation_description, client.observation_color, client.contact]);
             
-        await newConnect.query(`insert into client_address (id_client_address, address_client,number,complement,neighborhood,city,state_city,cep)
+        await newConnect.query(`insert into client_address (id_client_address, address_client,house_number,complement,neighborhood,city,state_city,cep)
         values ('${client.idEnd}','${client.address_client}','${client.number}','${client.complement}','${client.neighborhood}','${client.city}','${client.state_city}','${client.cep}')`);
 
         return await newConnect.query(`insert into client (id_client, client_info_id,client_address_id) values
         ('${client.id}','${client.idInfo}','${client.idEnd}')`);
   
-
   }
   catch (error) {
     
@@ -30,17 +29,17 @@ const createClient =  async (client) => {
 }
 
 
-const getClients = async () => {
+const getClients = async (values) => {
   const client = connect();
   try{
-
     const result = await client.query(`
             select  id_client,info.id_client_info,ende.id_client_address,
                     info.cpf_cnpj,info.type_client,info.name_client,info.corporate_name,info.email,info.observation_description,info.observation_color,info.contact,
-                    ende.address_client,ende.number,ende.complement,ende.neighborhood,ende.city,ende.state_city ,ende.cep
+                    ende.address_client,house_number,ende.complement,ende.neighborhood,ende.city,ende.state_city ,ende.cep
                     from client 
                     join client_info info on info.id_client_info = client_info_id 
-                    join client_address ende on ende.id_client_address = client_address_id ;`);
+                    join client_address ende on ende.id_client_address = client_address_id
+                    order by info.name_client desc limit '${values.limit}' offset '${values.offset}'`);
 
     return result;
 
@@ -61,7 +60,7 @@ const getClient = async (clientId) => {
 
     return await client.query(`select id_client,info.id_client_info,ende.id_client_address,
     info.cpf_cnpj,info.type_client,info.name_client,info.corporate_name,info.email,info.observation_description,info.observation_color,info.contact,
-    ende.address_client,ende.number,ende.complement,ende.neighborhood,ende.city,ende.state_city ,ende.cep
+    ende.address_client,ende.house_number,ende.complement,ende.neighborhood,ende.city,ende.state_city ,ende.cep
     from client 
     join client_info info on info.id_client_info = client_info_id 
     join client_address ende on ende.id_client_address = client_address_id  
@@ -99,7 +98,7 @@ const updateClient = async (clientE) => {
     WHERE id_client_info = '${clientExist.id_client_info}' `);
   
     return await client.query(`UPDATE client_address SET 
-    address_client = '${end.address_client || clientExist.address_client }', number = '${end.number || clientExist.number }', complement = '${end.complement || clientExist.complement }', 
+    address_client = '${end.address_client || clientExist.address_client }', house_number = '${end.number || clientExist.number }', complement = '${end.complement || clientExist.complement }', 
     neighborhood = '${end.neighborhood || clientExist.neighborhood }', city = '${end.city || clientExist.city }', state_city = '${end.state_city || clientExist.state_city }', cep = '${end.cep || clientExist.cep }'
     WHERE id_client_address = '${clientExist.id_client_address}' `);
     
@@ -120,9 +119,8 @@ const deleteClient = async (clientId) => {
   const client = connect();
   try{
     
-    let clientE = await getClients(clientId);
+    let clientE = await getClient(clientId);
     clientE = clientE.rows[0];
-    
     const result = await client.query(`DELETE FROM client where id_client = '${clientId}' `);
 
     await client.query(`DELETE FROM client_info WHERE id_client_info = '${clientE.id_client_info}' `);

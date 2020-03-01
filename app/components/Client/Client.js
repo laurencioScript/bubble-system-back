@@ -1,32 +1,36 @@
-const express = require('express');
-const Client = require('./clienteDAL');
-const router = express.Router();
-const JWT= require('./../../../jwt/authConfig');
-const Joi = require('joi');
-const { isUuid }  = require('uuidv4');
-const uuidV4 = require('uuid/v4');
+const express = require('express'), 
+Client = require('./clienteDAL'),
+router = express.Router(),
+JWT= require('./../../../jwt/authConfig'),
+Joi = require('joi'),
+{ isUuid }  = require('uuidv4'),
+uuidV4 = require('uuid/v4');
+
+
+
 router.use(JWT.getMiddleware);
+
+router.use('/:id', function(req, res, next) {
+    req.method == 'DELETE'  ?  JWT.hasPermissions(req,2) ? next() : res.status(401).send({error:'No permission'}) :  next();
+});
 
 
 router.get('/', async (req, res) => {
 
     try {
         
-        JWT.hasPermissions(req,res,1);
-
         const SchemaDefect = Joi.object().keys({ 
             limit: Joi.number().integer().min(0),
             offset: Joi.number().integer().min(0) 
         });
 
-        const resultValidate = Joi.validate(req.params, SchemaDefect);
+        const resultValidate = Joi.validate(req.query, SchemaDefect);
         
         if(resultValidate.error !== null){
             return res.status(400).send({error:resultValidate.error.details[0].message });
         }
 
         const {value} = resultValidate;
-
         value.limit =  value.limit ? value.limit : 10;
         value.offset =  value.offset ? value.offset : 0; 
 
@@ -57,8 +61,6 @@ router.post('/register', async (req, res) => {
     
     try {
         
-        JWT.hasPermissions(req,res,2);
-
         const Schema = Joi.object().keys({
             cpf_cnpj:Joi.string().required(),
             type_client:Joi.string().required(),
@@ -88,7 +90,7 @@ router.post('/register', async (req, res) => {
         resultValidate.value.idInfo = uuidV4();
 
 
-        const result = await Client.createClient(resultValidate.value);
+       const result = await Client.createClient(resultValidate.value);
 
         return res.status(200).send(resultValidate.value);
 
@@ -109,8 +111,6 @@ router.post('/register', async (req, res) => {
 router.get('/:id', async (req, res) => {
 
     try {
-        
-        JWT.hasPermissions(req,res,1);
 
         const Schema = Joi.object().keys({ id: Joi.string().required() });
 
@@ -149,8 +149,6 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
     
     try {
-        
-        JWT.hasPermissions(req,res,2);
 
         const Schema = Joi.object().keys({
             id:Joi.string().required(),
@@ -212,8 +210,6 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
 
     try {
-        
-        JWT.hasPermissions(req,res,2);
 
         const SchemaUser = Joi.object().keys({ id: Joi.string().required() });
 
@@ -226,7 +222,6 @@ router.delete('/:id', async (req, res) => {
         if(!isUuid(resultValidate.value.id)){
             return res.status(400).send({error:"The id is not valid" });
         }
-
         const result = await Client.deleteClient(resultValidate.value.id);
           
         if(result.rowCount < 1){
