@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
             return res.status(400).send({error:resultValidate.error.details[0].message });
         }
     
-        if(resultValidate.value.level < req.userLevel || resultValidate.value.level == 1){
+        if(resultValidate.value.level <= req.userLevel || resultValidate.value.level == 1){
             return res.status(400).send({error:'you do not have permission'});
         }
 
@@ -70,7 +70,6 @@ router.get('/', async (req, res) => {
             level: Joi.number().integer().min(1).max(3)
         });
         
-
         const resultValidate = Joi.validate(req.query, SchemaUser);
         
         if(resultValidate.error !== null){
@@ -172,7 +171,7 @@ router.put('/:id', async (req, res) => {
 
         // Se o level do usuario for maior que o parametro level que ele quer usar 
         // vai dar ERROR ou ele tenta transformar uma conta ADM ou Atendente em conta Mestre
-        if(req.userLevel > resultValidate.value.level || resultValidate.value.level == 1 ){
+        if(req.userLevel >= resultValidate.value.level || resultValidate.value.level == 1 ){
             return res.status(400).send({error:"You do not have permission" });
         }
 
@@ -222,7 +221,7 @@ router.delete('/:id', async (req, res) => {
         let user = await User.getUser(resultValidate.value.id);
         user = user.rows[0];
 
-        if(req.userLevel > user.level_user || user.level_user == 1 ){
+        if(req.userLevel >= user.level_user || user.level_user == 1 ){
             return res.status(400).send({error:"You do not have permission" });
         }
         
