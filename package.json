@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "prod": "cross-env NODE_ENV=prod node index"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "cross-env": "^6.0.3",
     "dotenv-safe": "^8.2.0",
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
@@ -32,10 +34,7 @@
     "uuidv4": "^6.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/preset-env": "^7.7.1",
-    "babel-jest": "^24.9.0",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "nodemon": "^1.19.4"
   }
 }
