@@ -7,6 +7,10 @@ exports.generateToken = (payload) => {
 
 exports.getMiddleware = (req,res,next) =>{
     
+    if (req.originalUrl.indexOf("/login") > 0) {
+        return next();
+    }
+
     const authHeader = req.headers.authorization;
     
     if(!authHeader){

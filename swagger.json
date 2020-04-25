@@ -1,0 +1,45 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Bubble System",
+    "description": "",
+    "version": "1.0"
+  },
+  "produces": ["application/json"],
+  "host": "localhost:3000",
+  "basePath": "/",
+  "paths": {
+    "/user/login": {
+      "post": {
+        "x-swagger-router-controller": "middleware-name1",
+        "operationId": "login",
+        "tags": ["/User"],
+        "content":"application/json",
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "email",
+            "description": "email do usuario",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "label":"true"
+            }
+          },
+          {
+            "in": "body",
+            "name": "password",
+            "description": "senha do usuario",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "label":"true"
+            }
+          }
+        ],
+        "responses": {}
+      }
+    }
+  }
+}

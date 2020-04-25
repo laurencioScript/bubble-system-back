@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const Joi = require('joi');
 const JWT= require('./../../../jwt/authConfig');
 
-router.post('/', async(req,res)=>{
+router.post('/login', async(req,res)=>{
  
   try {
 
@@ -58,4 +58,4 @@ router.post('/', async(req,res)=>{
   }
 })
 
-module.exports = app => app.use('/login',router)
+module.exports = app => app.use('/user',router)
