@@ -83,7 +83,6 @@ router.get("/", async (req, res) => {
     value.offset = value.offset ? value.offset : 0;
 
     const result = await User.getUsers(value);
-
     if (result.rowCount < 1) {
       return res.status(404).send({ error: "Not found" });
     }
@@ -169,7 +168,8 @@ router.put("/:id", async (req, res) => {
     // Se o level do usuario for maior que o parametro level que ele quer usar
     // vai dar ERROR ou ele tenta transformar uma conta ADM ou Atendente em conta Mestre
     if (
-      req.userLevel >= resultValidate.value.level ||
+      (req.userId != resultValidate.value.id &&
+        req.userLevel >= resultValidate.value.level) ||
       resultValidate.value.level == 1
     ) {
       return res.status(400).send({ error: "You do not have permission" });
