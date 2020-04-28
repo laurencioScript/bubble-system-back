@@ -1,5 +1,5 @@
 const express = require('express');
-const Item = require('./ItemDAL');
+const Item = require('./itemDAL');
 const router = express.Router();
 const JWT= require('./../../../jwt/authConfig');
 const Joi = require('joi');

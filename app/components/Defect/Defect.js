@@ -1,5 +1,5 @@
 const express = require('express');
-const Defect = require('./DefectDAL');
+const Defect = require('./defectDAL');
 const router = express.Router();
 const JWT= require('./../../../jwt/authConfig');
 const Joi = require('joi');
