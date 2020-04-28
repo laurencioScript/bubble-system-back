@@ -1,6 +1,12 @@
 const Pool = require("pg").Pool;
 const connect = () => {
-  return new Pool({
+  return process.env.DATABASE_URL ? 
+  new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
+  })
+  :
+  new Pool({
     user: "postgres",
     host: "127.0.0.1",
     database: "lavanderia",
@@ -8,5 +14,7 @@ const connect = () => {
     port: 5432,
   });
 };
+
+const client 
 
 module.exports = { connect };
