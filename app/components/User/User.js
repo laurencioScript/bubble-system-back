@@ -7,7 +7,7 @@ const Joi = require("joi");
 const { isUuid } = require("uuidv4");
 const uuidV4 = require("uuid/v4");
 
-router.use(JWT.getMiddleware);
+// router.use(JWT.getMiddleware);
 
 // Create User
 router.post("/register", async (req, res) => {
