@@ -15,6 +15,5 @@ const connect = () => {
   });
 };
 
-const client 
 
 module.exports = { connect };
