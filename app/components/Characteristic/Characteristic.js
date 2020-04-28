@@ -1,5 +1,5 @@
 const express = require("express");
-const Characteristic = require("./CharacteristicDAL");
+const Characteristic = require("./characteristicDAL");
 const router = express.Router();
 const JWT = require("./../../../jwt/authConfig");
 const Joi = require("joi");
