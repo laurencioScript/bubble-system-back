@@ -26,4 +26,4 @@ require('./app/components/Item/Item')(app);
 require('./app/components/Payment/payment')(app);
 
 
-app.listen(3000, () => console.log('Serve ON, PORT:3000'));
+app.listen(process.env.PORT || 3000, () => console.log('Serve ON, PORT:3000'));
