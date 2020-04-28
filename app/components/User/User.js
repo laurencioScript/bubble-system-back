@@ -276,4 +276,16 @@ router.put("/resetPassword/:id", async (req, res) => {
   }
 });
 
+router.get("/ping", async (req, res) => {
+  try {
+    
+    return res.status(200).send("pong");
+  } catch (error) {
+    if (error.detail) {
+      return res.status(400).send({ error: error.detail });
+    }
+    return res.status(400).send({ error: "Has error" });
+  }
+});
+
 module.exports = (app) => app.use("/user", router);
