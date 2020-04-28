@@ -60,7 +60,7 @@ router.post("/register", async (req, res) => {
 // List All Users
 router.get("/", async (req, res) => {
   try {
-    JWT.hasPermissions(req, res, 2);
+    // JWT.hasPermissions(req, res, 2);
 
     const SchemaUser = Joi.object().keys({
       limit: Joi.number().integer().min(0),
@@ -268,18 +268,6 @@ router.put("/resetPassword/:id", async (req, res) => {
     }
 
     return res.status(200).send({ result });
-  } catch (error) {
-    if (error.detail) {
-      return res.status(400).send({ error: error.detail });
-    }
-    return res.status(400).send({ error: "Has error" });
-  }
-});
-
-router.get("/ping", async (req, res) => {
-  try {
-    
-    return res.status(200).send("pong");
   } catch (error) {
     if (error.detail) {
       return res.status(400).send({ error: error.detail });
