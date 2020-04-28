@@ -1,4 +1,4 @@
-const Pool = require("pg").Client;
+const Client = require("pg").Client;
 const connect = () => {
   new Client({
     connectionString: process.env.DATABASE_URL,
