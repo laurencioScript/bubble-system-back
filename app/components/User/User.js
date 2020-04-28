@@ -7,7 +7,7 @@ const Joi = require("joi");
 const { isUuid } = require("uuidv4");
 const uuidV4 = require("uuid/v4");
 
-// router.use(JWT.getMiddleware);
+router.use(JWT.getMiddleware);
 
 // Create User
 router.post("/register", async (req, res) => {
@@ -60,7 +60,7 @@ router.post("/register", async (req, res) => {
 // List All Users
 router.get("/", async (req, res) => {
   try {
-    // JWT.hasPermissions(req, res, 2);
+    JWT.hasPermissions(req, res, 2);
 
     const SchemaUser = Joi.object().keys({
       limit: Joi.number().integer().min(0),
