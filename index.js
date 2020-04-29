@@ -6,7 +6,7 @@ const swaggerDocument = require('./swagger.json');
 const app = express();
 const router = express.Router();
 
-router.get('',(req,res)=> res.status(200).send("pong 2") );
+router.get('',(req,res)=> res.status(200).send("pong") );
 
 app.use('/',router);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
