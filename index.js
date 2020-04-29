@@ -8,7 +8,7 @@ const app = express();
 
 
 
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors())
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
