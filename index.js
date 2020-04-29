@@ -4,12 +4,11 @@ const bodyParser = require('body-parser'); // without this module it is not poss
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const app = express();
-const router = express.Router();
 
-router.get('',(req,res)=> res.status(200).send("pong") );
 
-app.use('/',router);
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors())
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
