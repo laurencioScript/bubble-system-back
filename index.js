@@ -5,14 +5,16 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const app = express();
 const router = express.Router();
-router.get('',(req,res)=>{
-  res.status(200).send("pong")
-})
+
+router.get('',(req,res)=> res.status(200).send("pong") );
+
 app.use('/',router);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors())
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
+
+
 require('./app/components/User/User')(app);
 require('./app/components/Client/Client')(app);
 require('./app/components/Unity/Unity')(app);
@@ -26,4 +28,4 @@ require('./app/components/Item/Item')(app);
 require('./app/components/Payment/payment')(app);
 
 
-app.listen(process.env.PORT || 3000, () => console.log('Serve ON, PORT:3000'));
+app.listen(process.env.PORT || 3000, () => console.log(`Serve ON, PORT: ${process.env.PORT || 3000} \n PRODUCTION ${process.env.PRODUCTION ? "ON" : "OFF"}`));

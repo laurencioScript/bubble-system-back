@@ -1,10 +1,12 @@
+require('dotenv/config');
+
 const Pool = require("pg").Pool;
 const connect = () => {
   return new Pool({
-    user: "kdnbakozvszrvp",
-    host: "ec2-18-206-84-251.compute-1.amazonaws.com",
-    database: "df2qkb2n05ro5a",
-    password: "778ef3c70d200104b95e89d58ba61f0216ba79ad8c3418cdb67027fb156bfa7f",
+    user: process.env.PRODUCTION ? process.env.USER : "postgres",
+    host: process.env.PRODUCTION ?  process.env.HOST : "127.0.0.1",
+    database: process.env.PRODUCTION ? process.env.DATABASE : "lavanderia",
+    password: process.env.PRODUCTION ? process.env.PASSWORD : "root",
     port: 5432,
   });
 };
