@@ -87,7 +87,6 @@ const loginUser = async (user) => {
     const result = await client.query(
       `SELECT id_user,name_user,email,level_user,password_user FROM userx WHERE email = '${user.email}'  `
     );
-    console.log(result)
     return result;
   } catch (error) {
     throw error;

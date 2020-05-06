@@ -27,4 +27,4 @@ require('./app/components/Item/Item')(app);
 require('./app/components/Payment/payment')(app);
 
 
-app.listen(process.env.PORT || 3000, () => console.log(`Serve ON, PORT: ${process.env.PORT || 3000} \n PRODUCTION ${process.env.PRODUCTION ? "ON" : "OFF"}`));
+app.listen(process.env.PORT || 3000, () => console.log(`Serve ON, PORT: ${process.env.PORT || 3000} \n PRODUCTION ${process.env.PRODUCTION == 'true' ? "ON" : "OFF"}`));
