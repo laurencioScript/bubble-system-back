@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
-const authConfig = process.env.SECRET ? process.env.SECRET : require("./configToken.json");
-console.log(authConfig)
+const authConfig = process.env.SECRET
+  ? process.env.SECRET
+  : require("./configToken.json");
 
 exports.generateToken = (payload) => {
   return jwt.sign(payload, authConfig, { expiresIn: 86400 });
@@ -28,8 +29,8 @@ exports.getMiddleware = (req, res, next) => {
   if (!/^Bearer$/i.test(scheme)) {
     return res.status(401).send({ error: "Token malformated" });
   }
-
-  jwt.verify(token, authConfig.secret, (err, decoded) => {
+  jwt.verify(token, authConfig, (err, decoded) => {
+    console.log(">>> err", err);
     if (err) return res.status(401).send({ err: "Token invalid" });
 
     req.userId = decoded.id;
