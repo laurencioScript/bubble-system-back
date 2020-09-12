@@ -1,7 +1,5 @@
 const jwt = require("jsonwebtoken");
-const authConfig = process.env.SECRET
-  ? process.env.SECRET
-  : require("./configToken.json");
+const authConfig = process.env.SECRET;
 
 exports.generateToken = (payload) => {
   return jwt.sign(payload, authConfig, { expiresIn: 86400 });
@@ -31,7 +29,7 @@ exports.getMiddleware = (req, res, next) => {
   }
   jwt.verify(token, authConfig, (err, decoded) => {
     console.log(">>> err", err);
-    if (err) return res.status(401).send({ err: "Token invalid" });
+    if (err) return res.status(401).send({ err: `Token invalid ${authConfig}` });
 
     req.userId = decoded.id;
     req.userLevel = decoded.level;
