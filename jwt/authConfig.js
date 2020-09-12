@@ -29,7 +29,7 @@ exports.getMiddleware = (req, res, next) => {
   }
   jwt.verify(token, authConfig, (err, decoded) => {
     console.log(">>> err", err);
-    if (err) return res.status(401).send({ err: `Token invalid ${err} ${authConfig}` });
+    if (err) return res.status(401).send({ err: `Token invalid` });
 
     req.userId = decoded.id;
     req.userLevel = decoded.level;
