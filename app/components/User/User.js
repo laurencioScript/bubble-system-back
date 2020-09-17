@@ -138,7 +138,7 @@ router.put("/:id", async (req, res) => {
     const SchemaUser = Joi.object().keys({
       id: Joi.string().required(),
       name: Joi.string().min(3).max(30).lowercase(),
-      password: Joi.string().min(8).max(30),
+      password: Joi.string().min(8).max(30).allow(""),
       email: Joi.string().email({ minDomainAtoms: 2 }),
       level: Joi.number().integer().min(1).max(3).required(),
     });
