@@ -56,11 +56,11 @@ const updateUser = async (user) => {
   try {
     let query = `UPDATE userx SET `;
     query += user.name ? ` name_user = '${user.name}' ,` : "";
-    query += user.email ? ` email = '${user.email}' ,` : "";
-    query += user.password ? ` password_user = '${user.password}' ,` : "";
-    query += user.level ? ` level_user = '${user.level}' ` : "";
+    query += user.level ? ` level_user = '${user.level}', ` : "";
+    query += user.email ? ` email = '${user.email}', ` : "";
+    query += user.password ? ` password_user = '${user.password}', ` : "";
+    query += ` id_user = '${user.id}' `;
     query += ` WHERE id_user = '${user.id}'`;
-
     return await client.query(query);
   } catch (error) {
     throw error;
