@@ -68,6 +68,7 @@ alter table client add constraint FK_CLIENT_ADDRESS foreign key (client_address_
 create table service(
 id_service uuid primary key,
 payment_id uuid,
+rol varchar(100) NULL,
 date_input timestamp,
 date_ouput timestamp,
 date_payment timestamp,

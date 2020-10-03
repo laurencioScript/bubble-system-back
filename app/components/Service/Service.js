@@ -82,13 +82,11 @@ router.post("/register", async (req, res) => {
         .send({ error: resultValidate.error.details[0].message });
     }
 
-    resultValidate.value.id =
-      cryptoRandomString({
-        length: 8,
-        type: "distinguishable",
-      }) +
-      "-" +
-      uuidV4();
+    resultValidate.value.id = uuidV4();
+    resultValidate.value.rol = cryptoRandomString({
+      length: 8,
+      type: "distinguishable",
+    });
     resultValidate.value.payment.id = uuidV4();
 
     const result = await Service.createService(resultValidate.value);
@@ -117,6 +115,10 @@ router.get("/:id", async (req, res) => {
       return res
         .status(400)
         .send({ error: resultValidate.error.details[0].message });
+    }
+
+    if (!isUuid(resultValidate.value.id)) {
+      return res.status(400).send({ error: "The id is not valid" });
     }
 
     const result = await Service.getOneService(resultValidate.value.id);
@@ -175,6 +177,10 @@ router.put("/:id", async (req, res) => {
         .send({ error: resultValidate.error.details[0].message });
     }
 
+    if (!isUuid(resultValidate.value.id_service)) {
+      return res.status(400).send({ error: "The id is not valid" });
+    }
+
     const result = await Service.updateService(resultValidate.value);
 
     if (result.rowCount < 1) {
@@ -205,6 +211,10 @@ router.delete("/:id", async (req, res) => {
       return res
         .status(400)
         .send({ error: resultValidate.error.details[0].message });
+    }
+
+    if (!isUuid(resultValidate.value.id)) {
+      return res.status(400).send({ error: "The id is not valid" });
     }
 
     const result = await Service.deleteService(resultValidate.value.id);
