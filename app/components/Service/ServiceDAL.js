@@ -31,21 +31,6 @@ const createService = async (service) => {
       ]
     );
 
-    const result = await client.query(
-      `insert into service values ($1,$2,$3, $4,$5,$6,$7,$8,$9)`,
-      [
-        service.id,
-        payment.id,
-        service.date_input,
-        service.date_ouput,
-        service.date_payment,
-        service.date_removed,
-        service.observation,
-        service.situation,
-        JSON.stringify(service.client),
-      ]
-    );
-
     itens.map(async (item) => {
       item.id = uuidV4();
       item.service_id = service.id;
