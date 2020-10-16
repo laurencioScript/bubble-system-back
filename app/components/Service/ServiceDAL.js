@@ -115,15 +115,26 @@ const updateService = async (service) => {
     const payment = service.payment;
     const itens = service.itens;
 
-    const result = await client.query(`UPDATE service SET
-    date_input = '${service.date_input || serviceExist.date_input}', 
-    date_ouput = '${service.date_ouput || serviceExist.date_ouput}',
-    date_payment = '${service.date_payment || serviceExist.date_payment}',
-    date_removed = '${service.date_removed || serviceExist.date_removed}', 
-    observation = '${service.observation || serviceExist.observation}', 
-    situation = '${service.situation || serviceExist.situation}', 
-    client = '${JSON.stringify(service.client || serviceExist.client)}'
-    where id_service = '${service.id_service}' `);
+
+    let update = "";
+
+    update += service.date_input != undefined ? `date_input = '${service.date_input}' ` : ``;
+    update += service.date_input != undefined ? ", ":"";
+    update += service.date_ouput != undefined ? `date_ouput = '${service.date_ouput}'` : ``;
+    update += service.date_ouput != undefined ? ", ":"";
+    update += service.date_payment != undefined ? `date_payment = '${service.date_payment}' ` : ``;
+    update += service.date_payment != undefined ? ", ":"";
+    update += service.date_removed != undefined ? `date_removed = '${service.date_removed}'` : ``;
+    update += service.date_removed != undefined ? ", ":"";
+    update += service.observation != undefined ? `observation = '${service.observation}'` : ``;
+    update += service.observation != undefined ? ", ":"";
+    update += service.situation != undefined ? `situation = '${service.situation}'` : ``;
+    update += service.situation != undefined ? ", ":"";
+    update += ` client = '${JSON.stringify(service.client || serviceExist.client)}' `
+
+    const result = await client.query(`UPDATE payment 
+    SET ${update}
+    where id_payment = '${service.id_service}' `);
 
     for (const item of itens) {
       await Item.updateItems(item);
