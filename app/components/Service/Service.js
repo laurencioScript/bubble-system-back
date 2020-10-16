@@ -53,10 +53,10 @@ router.post("/register", async (req, res) => {
     JWT.hasPermissions(req, res, 2);
 
     const Schema = Joi.object().keys({
-      date_input: Joi.string().allow(null),
-      date_ouput: Joi.string().allow(null),
-      date_payment: Joi.string().allow(null),
-      date_removed: Joi.string().allow(null),
+      date_input: Joi.allow(null),
+      date_ouput: Joi.allow(null),
+      date_payment: Joi.allow(null),
+      date_removed: Joi.allow(null),
       observation: Joi.string().allow(""),
       situation: Joi.string(),
       client: Joi.object(),
@@ -67,6 +67,7 @@ router.post("/register", async (req, res) => {
           check_pay: Joi.number(),
           money_pay: Joi.number(),
           discount: Joi.number().integer(),
+          interest: Joi.number().integer(),
           amount_paid: Joi.number(),
           value_total: Joi.number(),
         })
@@ -146,10 +147,10 @@ router.put("/:id", async (req, res) => {
     const Schema = Joi.object().keys({
       id_service: Joi.string().required(),
       payment_id: Joi.string(),
-      date_input: Joi.string(),
-      date_ouput: Joi.string(),
-      date_payment: Joi.string(),
-      date_removed: Joi.string(),
+      date_input: Joi.allow(null),
+      date_ouput: Joi.allow(null),
+      date_payment: Joi.allow(null),
+      date_removed: Joi.allow(null),
       observation: Joi.string(),
       situation: Joi.string(),
       client: Joi.object(),
@@ -160,6 +161,7 @@ router.put("/:id", async (req, res) => {
         check_pay: Joi.number(),
         money_pay: Joi.number(),
         discount: Joi.number().integer(),
+        interest: Joi.number().integer(),
         amount_paid: Joi.number(),
         value_total: Joi.number(),
       }),

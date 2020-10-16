@@ -85,6 +85,7 @@ credit_card decimal,
 check_pay decimal,
 money_pay decimal,
 discount int,
+interest int,
 amount_paid decimal,
 value_total decimal
 );

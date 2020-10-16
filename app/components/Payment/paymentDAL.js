@@ -10,7 +10,7 @@ const createPayment =  async (payment) => {
     return  await client.query(`insert into payment  values 
          ('${payment.id}','${payment.debit_card || 0 }',
          '${payment.credit_card || 0 }','${payment.check_pay || 0 }','${payment.money_pay || 0 }',
-         '${payment.discount || 0 }','${payment.amount_paid || 0 }','${payment.value_total || 0 }') `);
+         '${payment.discount || 0 }','${payment.amount_paid || 0 }','${payment.value_total || 0 }','${payment.interest || 0 }') `);
 
   }
   catch(error){
@@ -72,6 +72,8 @@ const updatePayment = async (payment) => {
     update += payment.money_pay != undefined ? ", ":"";
     update += payment.discount != undefined ? `discount = '${payment.discount}'` : ``;
     update += payment.discount != undefined ? ", ":"";
+    update += payment.interest != undefined ? `interest = '${payment.interest}'` : ``;
+    update += payment.interest != undefined ? ", ":"";
     update += payment.amount_paid != undefined ? `amount_paid = '${payment.amount_paid}'` : ``;
     update += payment.amount_paid != undefined ? ", ":"";
     update += payment.value_total != undefined ? `value_total = '${payment.value_total}'` : ``;
