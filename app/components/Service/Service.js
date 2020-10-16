@@ -151,9 +151,9 @@ router.put("/:id", async (req, res) => {
       date_ouput: Joi.allow(null),
       date_payment: Joi.allow(null),
       date_removed: Joi.allow(null),
-      observation: Joi.string(),
-      situation: Joi.string(),
-      client: Joi.object(),
+      observation: Joi.allow(null),
+      situation: Joi.string().allow(null),
+      client: Joi.object().allow(null),
       payment: Joi.object().keys({
         id_payment: Joi.string().required(),
         debit_card: Joi.number(),
