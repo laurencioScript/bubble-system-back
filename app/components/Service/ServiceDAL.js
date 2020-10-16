@@ -132,9 +132,9 @@ const updateService = async (service) => {
     update += service.situation != undefined ? ", ":"";
     update += ` client = '${JSON.stringify(service.client || serviceExist.client)}' `
 
-    const result = await client.query(`UPDATE payment 
+    const result = await client.query(`UPDATE service 
     SET ${update}
-    where id_payment = '${service.id_service}' `);
+    where id_service = '${service.id_service}' `);
 
     for (const item of itens) {
       await Item.updateItems(item);
