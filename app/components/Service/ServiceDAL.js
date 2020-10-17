@@ -116,25 +116,25 @@ const updateService = async (service) => {
     const itens = service.itens;
 
 
-    let update = "";
+    let update = `UPDATE public.service
+    SET 
+      date_input=$2, 
+      date_ouput=$3, 
+      date_payment=$4, 
+      date_removed=$5, 
+      observation=$6, 
+      situation=$7, 
+    WHERE 
+    id_service = $1;`;
 
-    update += service.date_input != undefined ? `date_input = '${service.date_input}' ` : ``;
-    update += service.date_input != undefined ? ", ":"";
-    update += service.date_ouput != undefined ? `date_ouput = '${service.date_ouput}'` : ``;
-    update += service.date_ouput != undefined ? ", ":"";
-    update += service.date_payment != undefined ? `date_payment = '${service.date_payment}' ` : ``;
-    update += service.date_payment != undefined ? ", ":"";
-    update += service.date_removed != undefined ? `date_removed = '${service.date_removed}'` : ``;
-    update += service.date_removed != undefined ? ", ":"";
-    update += service.observation != undefined ? `observation = '${service.observation}'` : ``;
-    update += service.observation != undefined ? ", ":"";
-    update += service.situation != undefined ? `situation = '${service.situation}'` : ``;
-    update += service.situation != undefined ? ", ":"";
-    update += ` client = '${JSON.stringify(service.client || serviceExist.client)}' `
-
-    const result = await client.query(`UPDATE service 
-    SET ${update}
-    where id_service = '${service.id_service}' `);
+    const result = await client.query(update,[
+      service.date_input,
+      service.date_ouput,
+      service.date_payment,
+      service.date_removed,
+      service.observation,
+      service.situation
+    ]);
 
     for (const item of itens) {
       await Item.updateItems(item);
