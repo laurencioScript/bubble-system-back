@@ -123,7 +123,7 @@ const updateService = async (service) => {
       date_payment=$4, 
       date_removed=$5, 
       observation=$6, 
-      situation=$7, 
+      situation=$7
     WHERE 
     id_service = $1;`;
 
