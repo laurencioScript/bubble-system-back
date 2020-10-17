@@ -28,7 +28,7 @@ const getUnitys = async (values) => {
       query += values.name ? `unity_name like '%${values.name}%' ` :""
     }
 
-    query += `order by unity_name desc limit '${values.limit}' offset '${values.offset}'`;
+    query += `order by unity_name desc  `;
 
     return await client.query(query);    
   }

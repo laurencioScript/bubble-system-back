@@ -41,7 +41,7 @@ const getAllItems = async (values) => {
     return await client.query(`select * from item 
     where 
         item.service_id  ${values.service_id ? `= '${values.service_id}'  `: "is not null "} 
-        order by piece desc limit '${values.limit}' offset '${values.offset}'`);
+        order by piece desc  `);
 
 
   }

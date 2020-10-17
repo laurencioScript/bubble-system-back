@@ -31,7 +31,7 @@ const getPieces = async (values) => {
       query += values.name ? `value like '%${values.value}%' ` :"";
     }
 
-    query += `order by piece_name desc limit '${values.limit}' offset '${values.offset}'`;
+    query += `order by piece_name desc  `;
 
     return await client.query(query);    
     

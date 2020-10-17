@@ -24,7 +24,7 @@ const getCharacteristics = async (values) => {
 
     let where = (values.name) ? ` where characteristic_name like '%${values.name}%' ` : "";
     
-    return  await client.query(`select * from characteristic  ${where} order by characteristic_name desc limit '${values.limit}' offset '${values.offset}'`);
+    return  await client.query(`select * from characteristic  ${where} order by characteristic_name desc`);
     
   }
   catch(error){

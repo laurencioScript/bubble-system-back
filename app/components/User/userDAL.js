@@ -27,7 +27,7 @@ const getUsers = async (values) => {
       query += values.level ? `level_user = '${values.level}' ` : "";
     }
 
-    query += `order by name_user desc limit '${values.limit}' offset '${values.offset}'`;
+    query += `order by name_user desc  `;
 
     return await client.query(query);
   } catch (error) {

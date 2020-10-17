@@ -33,7 +33,7 @@ const getColors = async (values) => {
 
     
 
-    return await client.query(`select * from color ${where} order by color_name desc limit '${values.limit}' offset '${values.offset}' `);
+    return await client.query(`select * from color ${where} order by color_name desc   `);
     
   }
   catch(error){

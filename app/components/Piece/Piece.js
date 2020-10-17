@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
 
     const { value } = resultValidate;
 
-    value.limit = value.limit ? value.limit : 10;
+    value.limit = value.limit ? value.limit : 10000;
     value.offset = value.offset ? value.offset : 0;
 
     const result = await Piece.getPieces(value);

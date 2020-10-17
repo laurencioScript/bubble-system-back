@@ -39,7 +39,7 @@ const getClients = async (values) => {
                     from client 
                     join client_info info on info.id_client_info = client_info_id 
                     join client_address ende on ende.id_client_address = client_address_id
-                    order by info.name_client desc limit '${values.limit}' offset '${values.offset}'`);
+                    order by info.name_client desc  `);
 
     return result;
 

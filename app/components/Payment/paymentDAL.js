@@ -27,7 +27,7 @@ const getPayments = async (values) => {
   const client = connect();
   try{
     
-    return await client.query(`select * from payment order by amount_paid desc limit '${values.limit}' offset '${values.offset}'`);
+    return await client.query(`select * from payment order by amount_paid desc  `);
    
   }
   catch(error){

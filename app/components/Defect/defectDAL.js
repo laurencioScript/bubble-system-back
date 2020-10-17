@@ -22,7 +22,7 @@ const getDefects = async (values) => {
       query += values.name ? `defect_name like '%${values.name}%' ` : "";
     }
 
-    query += `order by defect_name desc limit '${values.limit}' offset '${values.offset}'`;
+    query += `order by defect_name desc  `;
 
     return await client.query(query);
   } catch (error) {
