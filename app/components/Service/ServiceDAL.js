@@ -128,6 +128,7 @@ const updateService = async (service) => {
     id_service = $1;`;
 
     const result = await client.query(update,[
+      service.id_service,
       service.date_input,
       service.date_ouput,
       service.date_payment,
