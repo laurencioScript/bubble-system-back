@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const authConfig = process.env.SECRET;
+const authConfig = 'COVID-19';
 
 exports.generateToken = (payload) => {
   return jwt.sign(payload, authConfig, { expiresIn: 86400 });

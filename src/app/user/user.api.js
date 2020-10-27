@@ -1,15 +1,15 @@
-const express = require("express");
+const {Router} = require("express");
 const User = require("./userDAL");
-const JWT = require("./../../../jwt/authConfig");
-const router = express.Router();
+const JWT = require("../../../jwt/authConfig");
+const router = Router();
 const bcrypt = require("bcryptjs");
 const Joi = require("joi");
 const { isUuid } = require("uuidv4");
 const uuidV4 = require("uuid/v4");
+const errorHandler = require("./../errorHandler/error");
 
 router.use(JWT.getMiddleware);
 
-// Create User
 router.post("/register", async (req, res) => {
   try {
     JWT.hasPermissions(req, res, 2);
@@ -49,11 +49,7 @@ router.post("/register", async (req, res) => {
 
     return res.status(200).send(resultValidate.value);
   } catch (error) {
-    if (error.detail) {
-      return res.status(400).send({ error: error.detail });
-    } else {
-      return res.status(400).send({ error: "Has error" });
-    }
+    errorHandler(error);
   }
 });
 
@@ -89,13 +85,7 @@ router.get("/", async (req, res) => {
 
     return res.status(200).send({ result: result.rows });
   } catch (error) {
-    console.log("LOG", error);
-
-    if (error.detail) {
-      return res.status(400).send({ error: error.detail });
-    }
-
-    return res.status(400).send({ error: "Has error" });
+    errorHandler(error);
   }
 });
 
@@ -123,13 +113,7 @@ router.get("/:id", async (req, res) => {
 
     return res.status(200).send({ result: result.rows });
   } catch (error) {
-    console.log("LOG", error);
-
-    if (error.detail) {
-      return res.status(400).send({ error: error.detail });
-    }
-
-    return res.status(400).send({ error: "Has error" });
+    errorHandler(error);
   }
 }); //List One User
 
@@ -185,13 +169,7 @@ router.put("/:id", async (req, res) => {
 
     return res.status(200).send({ result: resultValidate.value });
   } catch (error) {
-    console.log("LOG", error);
-
-    if (error.detail) {
-      return res.status(400).send({ error: error.detail });
-    }
-
-    return res.status(400).send({ error: "Has error" });
+    errorHandler(error);
   }
 }); //Editar
 
@@ -228,11 +206,7 @@ router.delete("/:id", async (req, res) => {
 
     return res.status(200).send({ result: resultValidate.value });
   } catch (error) {
-    if (error.detail) {
-      return res.status(400).send({ error: error.detail });
-    }
-
-    return res.status(400).send({ error: "Has error" });
+    errorHandler(error);
   }
 }); //Deletar
 
@@ -269,10 +243,7 @@ router.put("/resetPassword/:id", async (req, res) => {
 
     return res.status(200).send({ result });
   } catch (error) {
-    if (error.detail) {
-      return res.status(400).send({ error: error.detail });
-    }
-    return res.status(400).send({ error: "Has error" });
+    errorHandler(error);
   }
 });
 
